@@ -1,6 +1,8 @@
 FunLex.fs
 FunPar.fs
 FunPar.fsi
+CPar.fs
+CPar.fsi
 bin
 obj
 .ionide
