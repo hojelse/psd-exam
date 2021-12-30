@@ -3,7 +3,7 @@
     Lexer specification for list-C, a small imperative language with lists
   *)
 
-// module CLex
+module CLex
 
 open FSharp.Text.Lexing
 open CPar;

@@ -4,9 +4,9 @@
     sestoft@itu.dk * 2010-01-02
   *)
 
-// module FunLex
+module FunLex
 
-open (*Microsoft.*) FSharp.Text.Lexing
+open FSharp.Text.Lexing
 open FunPar;
 
 let lexemeAsString lexbuf =
