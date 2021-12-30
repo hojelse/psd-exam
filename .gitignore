@@ -1,0 +1,8 @@
+FunLex.fs
+FunPar.fs
+FunPar.fsi
+bin
+obj
+.ionide
+.fake
+*.class
