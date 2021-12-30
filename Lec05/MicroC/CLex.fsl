@@ -3,7 +3,7 @@
     Lexer specification for micro-C, a small imperative language
   *)
 
-module CLex
+// module CLex
 
 open FSharp.Text.Lexing
 open CPar;
