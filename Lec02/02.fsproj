@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Expr/Absyn.fs" />
+    <Compile Include="Expr/Expr.fs" />
+    <!-- Include generated .fs files -->
+    <Compile Include="Expr/ExprPar.fsi" />
+    <Compile Include="Expr/ExprPar.fs" />
+    <Compile Include="Expr/ExprLex.fs" />
+    <Compile Include="Expr/Parse.fs" />
+    <Compile Include="ex2_4Handout.fs" />
+    <!-- Other files -->
+    <!-- <Compile Include="Program.fs" /> -->
+    <PackageReference Include="FsLexYacc" Version="10.2.0" />
+    <!-- <Import Project="~\.nuget\packages\fslexyacc\10.2.0\build\FsLexYacc.targets" /> -->
+</ItemGroup>
+</Project>
