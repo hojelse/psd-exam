@@ -3,6 +3,7 @@ FunPar.fs
 FunPar.fsi
 CPar.fs
 CPar.fsi
+CLex.fs
 bin
 obj
 .ionide
