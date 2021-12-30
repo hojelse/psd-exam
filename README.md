@@ -1,2 +1,2 @@
 # psd-exam
-PSD exam files with fsproj files
+PSD lecture files with added .fsproj files
