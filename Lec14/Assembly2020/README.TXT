@@ -11,7 +11,7 @@ B. To compile the nasm-generating micro-C compiler and use it.
    First compile and load the micro-C lexer and parser specifications,
    the bytecode assembler, and the assembly-generating micro-C
    compiler:
-   
+
    fslex --unicode CLex.fsl
    fsyacc --module CPar CPar.fsy
    fsharpi -r FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs X86.fs X86Comp.fs ParseAndComp.fs
@@ -72,7 +72,7 @@ Windows (Windows 10, Command Prompt for VS 2017):
    nasm -f win32 ex11.asm
    cl driver.obj ex11.obj /Fetry11.exe
    try11.exe 8
-   
+
    Must use underscore-prefixed external names _printi, _printc, ...
 
    Stack alignment constraints are not needed, but harmless.

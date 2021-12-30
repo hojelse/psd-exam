@@ -3,7 +3,7 @@
 let twice g x = g(g x)
 
 let add x = let f y = x+y in f
-let addtwo = add 2 
+let addtwo = add 2
 let x = 77
 addtwo 5
 

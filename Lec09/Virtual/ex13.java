@@ -15,11 +15,11 @@ class ex13 {
 }
 
 class InOut {
-  public static void printi(int i) { 
+  public static void printi(int i) {
     System.out.print(i + " ");
   }
 
-  public static void printc(char c) { 
+  public static void printc(char c) {
     System.out.print(c);
   }
 }

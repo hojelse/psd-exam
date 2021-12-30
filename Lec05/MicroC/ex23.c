@@ -6,7 +6,7 @@ void main() {
   print &a;
   a = 11;
   int b;
-  print &b;  
+  print &b;
   b = 22;
   swapV(a,b);
   print a;

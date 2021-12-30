@@ -1,11 +1,11 @@
-// ex35.lc -- a listC source program 
-// The v cons cell as shared between both car and cdr of w, 
+// ex35.lc -- a listC source program
+// The v cons cell as shared between both car and cdr of w,
 // so an update to one should be visible from the other.
-// We check that this holds also after provoking a garbage 
-// collection, because a faulty (copying) collector may 
+// We check that this holds also after provoking a garbage
+// collection, because a faulty (copying) collector may
 // unshare the car and cdr parts of w.
 
-// Should print: 33 33 and 44 44 
+// Should print: 33 33 and 44 44
 
 void main(int n) {
   dynamic v;

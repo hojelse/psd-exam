@@ -2,7 +2,7 @@
 
 module Absyn
 
-type expr = 
+type expr =
   | CstI of int
   | CstB of bool
   | Var of string

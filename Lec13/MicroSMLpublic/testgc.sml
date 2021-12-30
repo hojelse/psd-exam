@@ -1,5 +1,5 @@
 fun test t = fn r -> print (t = r)
-			   
+			
 (* Garbage Collection *)
 fun tgc01 n = (* Generate data that is dead immediately - test gc. *)
   let fun genFn n = if n > 0 then genFn (let val y = fn x -> x + 1 in n-1 end) else 42
@@ -21,4 +21,4 @@ begin
   test (tgc01 100000) 42;
   test (tgc02 100000) 42
 end
-      
+

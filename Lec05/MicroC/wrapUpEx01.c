@@ -2,12 +2,12 @@
      - abstract syntax
      - code generation for functions and function calls
      - code generation for L-values:
-         AccVar, Variable access: x = e 
-         AccDeref, Pointer dereferencing: *p 
+         AccVar, Variable access: x = e
+         AccDeref, Pointer dereferencing: *p
          AccIndex, Array indexing: a[e]
      - code generation for using pointers as return values
  */
-   
+
 void main() {
   int a;
 
@@ -15,7 +15,7 @@ void main() {
 
   AccDeref();
 
-  a=f(41);    
+  a=f(41);
 
   g(&a);
 }

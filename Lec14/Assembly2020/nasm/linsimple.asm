@@ -4,7 +4,7 @@ global main                    	; Define entry point for this code
 extern printf                  	; Refer to C library function
 
 section .text
-                
+
 main:
         push ebp                ; Save old base pointer
         mov ebp, esp            ; Set new base pointer

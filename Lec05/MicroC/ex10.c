@@ -13,6 +13,6 @@ void main(int n) {
 int fac(int n) {
   if (n == 0)			/* fac's n */
     return 1;
-  else 
+  else
     return n * fac(n-1);
 }

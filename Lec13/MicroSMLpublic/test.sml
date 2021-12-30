@@ -22,14 +22,14 @@ val tbool10 = let val x1 = 2
 		  fun abs x = if x < 0 then -x else x
 	      in
                 x1 = y1 || x2 = y2 || abs (x1-x2) = abs (y1-y2)
-	      end		      
+	      end		
 
 (* Let Expressions *)
 val tlet01 = let val x = 43 in x end
 val tlet02 = let val x = 43+46 in x end
 val tlet03 = let in 42 end
 val tlet04 = let in 1 end + let in 2 end + let in 3 end
-                 
+
 (* Functions *)
 val tfun01 = let fun f x = x + 7 in f 2 end
 val tfun02 = let fun f1 x = x + 1 in f1 12 end
@@ -88,19 +88,19 @@ val tfun18 = fn x -> fn y -> x
 val tfun19 = fn x -> fn y -> y
 val tfun20 = let fun compose f = fn g -> fn x -> g (f x) in compose end
 val tfun21 =
-  (* 'a -> 'b non terminating function matches arbritary type. *) 
+  (* 'a -> 'b non terminating function matches arbritary type. *)
   let fun infinity x = infinity x in infinity end
 
 (* Will run infinity *)
 (*val tfun22 = let fun infinity x = infinity x in infinity 42 end*)
 
-val tfun23 = 
+val tfun23 =
   let fun f x = x + g 4
       and g x = x
-  in f 1 
+  in f 1
   end
 
-val tfun24 = 
+val tfun24 =
   let fun f x = if 0 < x then f (x-1) + g x else x
       and g x = f (x-1)
   in f 3
@@ -158,7 +158,7 @@ val tfun33 = (* Mixing global, closure and local variables *)
   end
 
 fun tfun34 i = fn j -> if i <= 0 then 0 else tfun34' (i-1) + tfun34 (i-1) j
-and tfun34' i = tfun34 (i-1) i	   
+and tfun34' i = tfun34 (i-1) i	
 
 fun tfun35 i = fn j -> fn k -> fn l ->
   let
@@ -199,7 +199,7 @@ begin
   test tfun06 79 ;
   test (tfun07 8) 10 ;
   test (tfun08 2) 4;
-  test (tfun09 5) 27;  
+  test (tfun09 5) 27;
   test tfun10 1;
   test tfun12 false;
   test tfun14 false;
@@ -224,7 +224,7 @@ begin
   test tfun33 163;
   test (tfun34 4 10) 0;
   test (tfun35 1 2 3 4) 11;
-  
+
   test tseq01 42
 
 end

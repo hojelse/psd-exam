@@ -1,7 +1,7 @@
-void main(int n){                                                               
-  // ++n;                                                                        
-  println;                                                                
-  print n;                                                                
-  println;                                                                
-}                                                                               
-   
+void main(int n){
+  // ++n;
+  println;
+  print n;
+  println;
+}
+

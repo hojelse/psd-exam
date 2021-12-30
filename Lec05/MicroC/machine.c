@@ -52,7 +52,7 @@
 #define STOP 25
 
 #define STACKSIZE 1000
-  
+
 // Print the stack machine instruction at p[pc]
 
 void printInstruction(int p[], int pc) {
@@ -83,7 +83,7 @@ void printInstruction(int p[], int pc) {
   case PRINTC: printf("PRINTC"); break;
   case LDARGS: printf("LDARGS"); break;
   case STOP:   printf("STOP"); break;
-  default:     printf("<unknown>"); break; 
+  default:     printf("<unknown>"); break;
   }
 }
 
@@ -95,18 +95,18 @@ void printStackAndPc(int s[], int bp, int sp, int p[], int pc) {
   for (i=0; i<=sp; i++)
     printf("%d ", s[i]);
   printf("]");
-  printf("{%d:", pc); printInstruction(p, pc); printf("}\n"); 
+  printf("{%d:", pc); printInstruction(p, pc); printf("}\n");
 }
 
 // Read instructions from a file, return array of instructions
 
 int* readfile(char* filename) {
   int capacity = 1, size = 0;
-  int *program = (int*)malloc(sizeof(int)*capacity); 
+  int *program = (int*)malloc(sizeof(int)*capacity);
   FILE *inp = fopen(filename, "r");
   int instr;
   while (fscanf(inp, "%d", &instr) == 1) {
-    if (size >= capacity) { 
+    if (size >= capacity) {
       int* buffer = (int*)malloc(sizeof(int) * 2 * capacity);
       int i;
       for (i=0; i<capacity; i++)
@@ -121,38 +121,38 @@ int* readfile(char* filename) {
   return program;
 }
 
-// The machine: execute the code starting at p[pc] 
+// The machine: execute the code starting at p[pc]
 
 int execcode(int p[], int s[], int iargs[], int iargc, int /* boolean */ trace) {
-  int bp = -999;	// Base pointer, for local variable access 
+  int bp = -999;	// Base pointer, for local variable access
   int sp = -1;	        // Stack top pointer
   int pc = 0;		// Program counter: next instruction
   for (;;) {
-    if (trace) 
+    if (trace)
       printStackAndPc(s, bp, sp, p, pc);
     switch (p[pc++]) {
     case CSTI:
       s[sp+1] = p[pc++]; sp++; break;
-    case ADD: 
+    case ADD:
       s[sp-1] = s[sp-1] + s[sp]; sp--; break;
-    case SUB: 
+    case SUB:
       s[sp-1] = s[sp-1] - s[sp]; sp--; break;
-    case MUL: 
+    case MUL:
       s[sp-1] = s[sp-1] * s[sp]; sp--; break;
-    case DIV: 
+    case DIV:
       s[sp-1] = s[sp-1] / s[sp]; sp--; break;
-    case MOD: 
+    case MOD:
       s[sp-1] = s[sp-1] % s[sp]; sp--; break;
-    case EQ: 
+    case EQ:
       s[sp-1] = (s[sp-1] == s[sp] ? 1 : 0); sp--; break;
-    case LT: 
+    case LT:
       s[sp-1] = (s[sp-1] < s[sp] ? 1 : 0); sp--; break;
-    case NOT: 
+    case NOT:
       s[sp] = (s[sp] == 0 ? 1 : 0); break;
-    case DUP: 
+    case DUP:
       s[sp+1] = s[sp]; sp++; break;
-    case SWAP: 
-      { int tmp = s[sp];  s[sp] = s[sp-1];  s[sp-1] = tmp; } break; 
+    case SWAP:
+      { int tmp = s[sp];  s[sp] = s[sp-1];  s[sp-1] = tmp; } break;
     case LDI:                 // load indirect
       s[sp] = s[s[sp]]; break;
     case STI:                 // store indirect, keep value on top
@@ -169,33 +169,33 @@ int execcode(int p[], int s[], int iargs[], int iargc, int /* boolean */ trace) 
       pc = (s[sp--] == 0 ? p[pc] : pc+1); break;
     case IFNZRO:
       pc = (s[sp--] != 0 ? p[pc] : pc+1); break;
-    case CALL: { 
+    case CALL: {
       int argc = p[pc++];
       int i;
       for (i=0; i<argc; i++)		   // Make room for return address
 	s[sp-i+2] = s[sp-i];		   // and old base pointer
-      s[sp-argc+1] = pc+1; sp++; 
-      s[sp-argc+1] = bp;   sp++; 
+      s[sp-argc+1] = pc+1; sp++;
+      s[sp-argc+1] = bp;   sp++;
       bp = sp+1-argc;
-      pc = p[pc]; 
-    } break; 
-    case TCALL: { 
+      pc = p[pc];
+    } break;
+    case TCALL: {
       int argc = p[pc++];                  // Number of new arguments
       int pop  = p[pc++];		   // Number of variables to discard
       int i;
       for (i=argc-1; i>=0; i--)	   // Discard variables
 	s[sp-i-pop] = s[sp-i];
-      sp = sp - pop; pc = p[pc]; 
-    } break; 
-    case RET: { 
-      int res = s[sp]; 
-      sp = sp-p[pc]; bp = s[--sp]; pc = s[--sp]; 
-      s[sp] = res; 
-    } break; 
+      sp = sp - pop; pc = p[pc];
+    } break;
+    case RET: {
+      int res = s[sp];
+      sp = sp-p[pc]; bp = s[--sp]; pc = s[--sp];
+      s[sp] = res;
+    } break;
     case PRINTI:
-      printf("%d ", s[sp]); break; 
+      printf("%d ", s[sp]); break;
     case PRINTC:
-      printf("%c", s[sp]); break; 
+      printf("%c", s[sp]); break;
     case LDARGS: {
       int i;
       for (i=0; i<iargc; i++) // Push commandline arguments
@@ -203,7 +203,7 @@ int execcode(int p[], int s[], int iargs[], int iargc, int /* boolean */ trace) 
     } break;
     case STOP:
       return 0;
-    default:                  
+    default:
       printf("Illegal instruction %d at address %d\n", p[pc-1], pc-1);
       return -1;
     }

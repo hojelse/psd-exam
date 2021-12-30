@@ -57,12 +57,12 @@ class LinkedList extends Object {
 // InOut.java -- Definitions of print primitives
 
 class InOut {
-  public static void print(Object o) { 
-    System.out.println(o); 
+  public static void print(Object o) {
+    System.out.println(o);
   }
 
-  public static void print(int i) { 
-    System.out.println(i); 
+  public static void print(int i) {
+    System.out.println(i);
   }
 }
 

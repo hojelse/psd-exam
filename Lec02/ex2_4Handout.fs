@@ -15,6 +15,6 @@ let assemble instrs = failwith "Not implemented"
 
 (* Output the integers in list inss to the text file called fname: *)
 
-let intsToFile (inss : int list) (fname : string) = 
+let intsToFile (inss : int list) (fname : string) =
     let text = String.concat " " (List.map string inss)
     System.IO.File.WriteAllText(fname, text);;

@@ -1,4 +1,4 @@
-// ex33.lc -- a listC source program 
+// ex33.lc -- a listC source program
 
 // Various list-manipulating functions in list-C
 
@@ -33,7 +33,7 @@ int sumlist(dynamic xs) {
 }
 
 dynamic append(dynamic xs, dynamic ys) {
-  if (xs) 
+  if (xs)
     return cons(car(xs), append(cdr(xs), ys));
   else
     return ys;

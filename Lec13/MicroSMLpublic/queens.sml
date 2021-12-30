@@ -1,5 +1,5 @@
 (* Below is a solution the the n-Queens Program.
-   The source code is a small re-write of the solution found on 
+   The source code is a small re-write of the solution found on
    this url:
      http://rosettacode.org/wiki/N-queens_problem#Standard_ML
 *)
@@ -8,9 +8,9 @@ fun abs x = if x < 0 then -x else x
 
 fun pair x = fn y -> x :: y :: nil  (* Represent a coordinate as a list with two elements *)
 fun fst p = hd p
-fun snd p = hd (tl p)				   
+fun snd p = hd (tl p)				
 
-(* 
+(*
  * val threat : (int * int) -> (int * int) -> bool
  * Returns true iff the queens at the given positions threaten each other
  *)
@@ -62,4 +62,4 @@ begin
   print(doAll 7)
 
 end
-												  
+												

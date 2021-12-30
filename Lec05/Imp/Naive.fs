@@ -1,4 +1,4 @@
-(* File Imp/Naive.fs 
+(* File Imp/Naive.fs
 
    A naive imperative language with for- and while-loops
    sestoft@itu.dk * 2009-11-17
@@ -19,11 +19,11 @@ let setSto (store : naivestore) (k, v) = store.Add(k, v)
 
 (* Abstract syntax for expressions *)
 
-type expr = 
+type expr =
   | CstI of int
   | Var of string
   | Prim of string * expr * expr
-    
+
 let rec eval e (store : naivestore) : int =
     match e with
     | CstI i -> i
@@ -39,7 +39,7 @@ let rec eval e (store : naivestore) : int =
       | "<"  -> if i1 < i2 then 1 else 0
       | _    -> failwith "unknown primitive"
 
-type stmt = 
+type stmt =
   | Asgn of string * expr
   | If of expr * stmt * stmt
   | Block of stmt list
@@ -49,33 +49,33 @@ type stmt =
 
 let rec exec stmt (store : naivestore) : naivestore =
     match stmt with
-    | Asgn(x, e) -> 
+    | Asgn(x, e) ->
       setSto store (x, eval e store)
-    | If(e1, stmt1, stmt2) -> 
+    | If(e1, stmt1, stmt2) ->
       if eval e1 store <> 0 then exec stmt1 store
                             else exec stmt2 store
-    | Block stmts -> 
-      let rec loop ss sto = 
-              match ss with 
+    | Block stmts ->
+      let rec loop ss sto =
+              match ss with
               | []     -> sto
               | s1::sr -> loop sr (exec s1 sto)
       loop stmts store
-    | For(x, estart, estop, stmt) -> 
+    | For(x, estart, estop, stmt) ->
       let start = eval estart store
       let stop  = eval estop  store
-      let rec loop i sto = 
-              if i > stop then sto 
+      let rec loop i sto =
+              if i > stop then sto
                           else loop (i+1) (exec stmt (setSto sto (x, i)))
-      loop start store 
-    | While(e, stmt) -> 
+      loop start store
+    | While(e, stmt) ->
       let rec loop sto =
               if eval e sto = 0 then sto
                                 else loop (exec stmt sto)
       loop store
-    | Print e -> 
+    | Print e ->
       (printf "%d\n" (eval e store); store)
 
-let run stmt = 
+let run stmt =
     let _ = exec stmt emptystore
     ()
 
@@ -83,10 +83,10 @@ let run stmt =
 
 let ex1 =
     Block[Asgn("sum", CstI 0);
-          For("i", CstI 0, CstI 100, 
+          For("i", CstI 0, CstI 100,
               Asgn("sum", Prim("+", Var "sum", Var "i")));
           Print (Var "sum")];;
-    
+
 let ex2 =
     Block[Asgn("i", CstI 1);
           Asgn("sum", CstI 0);
@@ -96,4 +96,4 @@ let ex2 =
                        Asgn("i", Prim("+", CstI 1, Var "i"))]);
           Print (Var "i");
           Print (Var "sum")];;
-    
+

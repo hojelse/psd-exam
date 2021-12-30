@@ -1,9 +1,9 @@
-// ex32.lc -- a listC source program 
+// ex32.lc -- a listC source program
 
 // For any input n, the program should be able to run provided the
 // heap is big enough.  But when the mark phase of the garbage
 // collector uses a recursive auxiliary function, that function may
-// overflow the C stack.  This is impossible to observe under gcc and 
+// overflow the C stack.  This is impossible to observe under gcc and
 // Linux, though.  Maybe the Linux C stack segment is just huge?
 
 void main(int n) {
@@ -16,7 +16,7 @@ void main(int n) {
   }
   printlist(longlist);
   // Allocate more data to provoke a garbage collection
-  while (1) { 
+  while (1) {
     dynamic xs;
     xs = cons(nil,nil);
   }

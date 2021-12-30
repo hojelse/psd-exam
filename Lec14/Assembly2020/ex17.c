@@ -17,7 +17,7 @@ int seq(int i) {
   count = 0;
   while (i != 1) {
     count = count + 1;
-    if (i % 2 == 0) 
+    if (i % 2 == 0)
       i = i / 2;
     else
       i = i * 3 + 1;

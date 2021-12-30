@@ -2,7 +2,7 @@
 
 fun h x = x + g (23::nil) (* x has type int *)
 and g x = hd x            (* x has type int list *)
-      
+
 begin
-  print h 3	     
-end	    
+  print h 3	
+end	

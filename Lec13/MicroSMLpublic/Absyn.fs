@@ -2,7 +2,7 @@
 
 module Absyn
 
-type expr<'a> = 
+type expr<'a> =
   | CstI of int * 'a option
   | CstB of bool * 'a option
   | CstN of 'a option
@@ -13,7 +13,7 @@ type expr<'a> =
   | Prim2 of string * expr<'a> * expr<'a> * 'a option
   | Prim1 of string * expr<'a> * 'a option
   | If of expr<'a> * expr<'a> * expr<'a>
-  | Fun of string * expr<'a> * 'a option 
+  | Fun of string * expr<'a> * 'a option
   | Call of expr<'a> * expr<'a> * bool option * 'a option
   | Let of valdec<'a> list * expr<'a>
   | Raise of expr<'a> * 'a option
@@ -23,7 +23,7 @@ and valdec<'a> =
   | Valdec of string * expr<'a>
   | Exn of exnvar * 'a option
 and exnvar =
-  | ExnVar of string    
+  | ExnVar of string
 and program<'a> =
   | Prog of valdec<'a> list * expr<'a> (* A program is a list of top level declarations and an expression *)
 
@@ -61,7 +61,7 @@ let ppProg fPP p : string =
     | TryWith(e1,exn,e2) -> "\n" + (indent (i+2)) + "(try " + (ppExpr' (i+4) e1) +
                             "\n" + (indent (i+2)) + "with " + (ppExnVar exn) + " -> " + (ppExpr' (i+4) e2) + ")"
   and ppExnVar = function
-    | ExnVar exn -> exn      
+    | ExnVar exn -> exn
   and ppValDec' i = function
     | Fundecs fs -> ppFundec i fs
     | Valdec(x,eRhs) -> ppValdec i (x,eRhs)
@@ -71,9 +71,9 @@ let ppProg fPP p : string =
       ppValdecs i valdecs + "\n" + (indent i) + "begin\n" +
         (indent 2) + (ppExpr' (i+2) e) + "\n" + (indent i) + "end"
   and ppValdecs i valdecs = String.concat "\n" (List.map (ppValDec' i) valdecs)
-  and ppFundec i fs = 
+  and ppFundec i fs =
     let fsPP = List.map (fun (f,x,body) -> f + " " + x + " = " + (ppExpr' i body)) fs
-    (indent i) + "fun " + (String.concat ("\n" + (indent i) + "and ") fsPP) 
+    (indent i) + "fun " + (String.concat ("\n" + (indent i) + "and ") fsPP)
   and ppValdec i (x,eRhs) =
     (indent i) + "val " + x + " = " + (ppExpr' i eRhs)
   ppProg' 0 p
@@ -115,8 +115,8 @@ let tailcalls p : program<'a> =
     | Call(e1,e2,_,aOpt) -> Call(tc' false e1,tc' false e2,Some tPos,aOpt)
     | Let(valdecs,letBody) -> Let(List.map (tcValdec' false) valdecs,tc' tPos letBody)
     | Raise(e1,aOpt) -> e
-      (* an exception handler must be popped after e1 *)    
-    | TryWith(e1,exn,e2) -> TryWith(tc' false e1, exn, tc' tPos e2) 
+      (* an exception handler must be popped after e1 *)
+    | TryWith(e1,exn,e2) -> TryWith(tc' false e1, exn, tc' tPos e2)
   and tcValdec' tPos = function
     | Valdec(x,eRhs) -> Valdec(x,tc' tPos eRhs)
     | Fundecs(fs) -> Fundecs(List.map (fun (f,x,e) -> (f,x,tc' true e)) fs)
@@ -127,9 +127,9 @@ let tailcalls p : program<'a> =
 
 let ppFreevars fvs =
   "\nFreevars = [ " + (String.concat "," fvs) + " ]\n"
-    
+
 let rec freevars e : string Set =
-  match e with 
+  match e with
   | CstI (i,_) -> Set.empty
   | CstB (b,_) -> Set.empty
   | CstN _     -> Set.empty
@@ -141,20 +141,20 @@ let rec freevars e : string Set =
   | Seq(e1,e2,_) -> (freevars e1) + (freevars e2)
   | Let(valdecs,letBody) ->
     (* Below (... +fvs - bvs) assumes alpha conversion. See ex11.sml for an example where
-       it fails. Alpha conversion is covered as an exercise. *)  
+       it fails. Alpha conversion is covered as an exercise. *)
     let (fvs,bvs) = List.fold freevarsValdec (Set.empty, Set.empty) valdecs
-    (freevars letBody) + fvs - bvs 
+    (freevars letBody) + fvs - bvs
   | If(e1, e2, e3) -> (freevars e1) + (freevars e2) + (freevars e3)
   | Fun(x,fBody,_) -> freevars fBody - (set [x])
   | Call(eFun, eArg,_,_) -> freevars eFun + (freevars eArg)
   | Raise(e1,_) -> freevars e1
   | TryWith(e1,ExnVar exn,e2) -> (freevars e1) + (set [exn]) + (freevars e2) (* exn is also free *)
 and freevarsValdec (fvs, bvs) = function (* bvs are bound variables, either globally or in locally. *)
-    Valdec(x,eRhs) -> (fvs + ((freevars eRhs) - set [x]),bvs + set [x]) 
+    Valdec(x,eRhs) -> (fvs + ((freevars eRhs) - set [x]),bvs + set [x])
   | Exn (ExnVar exn,aOpt) -> (fvs,bvs + set [exn])
-  | Fundecs(fs) -> 
+  | Fundecs(fs) ->
     let fEnv = Set.ofList (List.map (fun (f,_,_) -> f) fs) (* fBody may recursively call f *)
-    let funFree = List.foldBack (fun (_,x,fBody) acc -> (acc + (freevars fBody - fEnv - set [x]))) fs fvs 
+    let funFree = List.foldBack (fun (_,x,fBody) acc -> (acc + (freevars fBody - fEnv - set [x]))) fs fvs
     (funFree, bvs + fEnv)
 
 (* Alpha conversion is implemented as an exercise.

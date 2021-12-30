@@ -1,5 +1,5 @@
 fslex --unicode FunLex.fsl
-fsyacc --module FunPar FunPar.fsy    
+fsyacc --module FunPar FunPar.fsy
 
 fsharpc --standalone -r:/Users/nielshallenberg/fsharp/FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs TypeInference.fs HigherFun.fs Machine.fs Contcomp.fs ParseTypeAndRun.fs MicroSMLC.fs -o microsmlc.exe
 
@@ -19,7 +19,7 @@ mono microsmlc.exe -opt -eval ex03.sml
 mono microsmlc.exe -opt -eval ex04.sml
 ./msmlmachine ex04.out
 
-mono microsmlc.exe -opt -eval ex05.sml 
+mono microsmlc.exe -opt -eval ex05.sml
 ./msmlmachine ex05.out
 
 mono microsmlc.exe -opt -eval test.sml

@@ -14,7 +14,7 @@ interface Cont {
 class Factorial {
   public static void main(String[] args) {
     int n = Integer.parseInt(args[0]);
-    System.out.println(facc(n, 
+    System.out.println(facc(n,
                             new Cont() {
                                 public int k(int v) {
                                   return v;
@@ -26,10 +26,10 @@ class Factorial {
   // translation of the functional (F#) version:
 
   static int facc(final int n, final Cont cont) {
-    if (n == 0) 
+    if (n == 0)
       return cont.k(1);
     else
-      return facc(n-1, 
+      return facc(n-1,
                   new Cont() {
                       public int k(int v) {
                         return cont.k(n * v);

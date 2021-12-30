@@ -10,7 +10,7 @@ int getUserTimeMs() {
 
 word* readfile(char* filename) {
   int capacity = 1, size = 0;
-  word *program = (word*)malloc(sizeof(word)*capacity); 
+  word *program = (word*)malloc(sizeof(word)*capacity);
   FILE *inp = fopen(filename, "r");
   if (inp == NULL) {
     printf("File %s not found.\n", filename);
@@ -18,7 +18,7 @@ word* readfile(char* filename) {
   }
   int instr;
   while (fscanf(inp, "%d", &instr) == 1) {
-    if (size >= capacity) { 
+    if (size >= capacity) {
       word* buffer = (word*)malloc(sizeof(word) * 2 * capacity);
       int i;
       for (i=0; i<capacity; i++)

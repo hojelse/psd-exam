@@ -42,5 +42,5 @@ D. File SimpleExpr.java contains a Java version of abstract syntax
    closely corresponds to the expr type and eval function in F# file
    Intro2.fs.  To compile and execute it, do:
 
-   javac SimpleExpr.java 
-   java SimpleExpr 
+   javac SimpleExpr.java
+   java SimpleExpr

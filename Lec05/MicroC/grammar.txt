@@ -30,11 +30,11 @@ already complex enough to deserve an explanation:
 
  * The definition of a comma-separated list (of variables or argument
    expressions) must be split into three cases:
-   
+
       empty list
       one element (and no comma)
       more than one element (separated by commas)
-  
+
    This is best achieved using two nonterminal symbols, as
    illustrated by comma-separated argument expression lists:
 
@@ -72,7 +72,7 @@ vardec ::=                              variable or parameter declaration
 
 vardesc ::=                             variable description
         NAME                            variable
-        * vardesc                       pointer to 
+        * vardesc                       pointer to
         ( vardesc )                     parenthesized variable description
         vardesc [ ]                     array of
         vardesc [ int ]                 array of given size
@@ -89,7 +89,7 @@ paramdecs1 ::=                          non-empty parameter declaration list
         vardec
         vardec , paramdecs1
 
-stmt ::= 
+stmt ::=
         if (expr) stmt                  if-statement
         if (expr) stmt else stmt        if-else statement
         while (expr) stmt               while-loop
@@ -97,7 +97,7 @@ stmt ::=
         return ;                        return
         return expr ;                   return
         block                           block statement
-        
+
 block ::=                               block statement
         { stmtordecseq }
 
@@ -155,7 +155,7 @@ typ ::=
 Second attempt at a grammar, more suitable for a parser specification
 ---------------------------------------------------------------------
 
-Important changes: 
+Important changes:
 
  * We split statements into two kinds: stmtm and stmtu.  In the
    former, there are no if-statements at top-level without a matching
@@ -163,16 +163,16 @@ Important changes:
    matching else-branch.  This `dangling else' problem is discussed in
    Mogensen's book.  The implication is that
 
-      if (e1) if (e2) s1 else s2 
+      if (e1) if (e2) s1 else s2
 
-   is parsed the same way as 
+   is parsed the same way as
 
       if (e1) { if (e2) s1 else s2 }
 
    not as
 
-      if (e1) { if (e2) s1 } else s2 
-   
+      if (e1) { if (e2) s1 } else s2
+
  * The grammar would still be ambiguous and cause shift/reduce
    conflicts, if we did not use precedence declarations on the
    operators that can appear in an expression:
@@ -181,9 +181,9 @@ Important changes:
        nonassoc PRINT
        left     ||
        left     &&
-       left     ==  != 
+       left     ==  !=
        nonassoc >  <  >=  <=
-       left     +  - 
+       left     +  -
        left     *  /  %
        nonassoc !  &
        nonassoc [             /* highest precedence  */
@@ -194,23 +194,23 @@ Important changes:
    operators, the logical connectives must bind less strongly than the
    comparisons, logical or (||) binds less strongly than logical and
    (&&), the <, >, <=, >= comparisons must be non-associative, lowest
-   precedence, and so on.  
+   precedence, and so on.
 
    The high precedence given to the left bracket ([) is necessary to
    avoid ambiguity and parse conflicts in expressions and variable
-   declarations.  For expressions it implies that 
-   
-     * the parsing of  &a[2]  is  &(a[2]), not  (&a)[2] 
+   declarations.  For expressions it implies that
+
+     * the parsing of  &a[2]  is  &(a[2]), not  (&a)[2]
 
      * the parsing of  *a[2]  is  *(a[2]), not  (*a)[2]
 
-     For variable declarations, it implies that 
-   
+     For variable declarations, it implies that
+
      * the parsing of  int *a[10]  is  int *(a[10]), not  int (*a)[10]
 
    The low precedence given to PRINT is necessary to avoid ambiguity
    and parse conflicts in expressions with two-argument operators.
-   It implies that 
+   It implies that
 
      * the parsing of  print 2 + 5  is  print (2 + 5), not (print 2) + 5
 
@@ -229,7 +229,7 @@ Important changes:
 
      * the parsing of  *x*2  is  (*x)*2, not  *(x*2)
 
-main ::= 
+main ::=
         topdecs EOF                     program
 
 topdecs ::=                             top-level declarations
@@ -238,7 +238,7 @@ topdecs ::=                             top-level declarations
 
 topdec ::=                              top-level declaration
         vardec ;
-        fundec  
+        fundec
 
 vardec ::=                              variable or parameter declaration
         typ vardesc
@@ -260,7 +260,7 @@ paramdecs ::=                           comma-separated parameter list
 
 paramdecs1 ::=                          non-empty parameter declaration list
         vardec
-        vardec , paramdecs1             
+        vardec , paramdecs1
 
 stmt ::=                                statement
         stmtm                           without unmatched trailing if-else
@@ -277,12 +277,12 @@ stmtm ::=                               no unmatched trailing if-else
 stmtu ::=
         if (expr) stmtm else stmtu      unmatched trailing if
         if (expr) stmt                  unmatched if
-        while (expr) stmtu              unmatched 
+        while (expr) stmtu              unmatched
 
 block ::=                               block statement
         { stmtordecseq }
 
-stmtordecseq ::= 
+stmtordecseq ::=
         <empty>                         empty sequence
         stmt stmtordecseq               statement
         vardec ; stmtordecseq           local variable declaration
@@ -312,12 +312,12 @@ exprnotaccess ::=
         expr && expr                    sequential and
         expr || expr                    sequential or
 
-atexprnotaccess ::= 
+atexprnotaccess ::=
         const                           constant
         ( exprnotaccess )               parenthesis
         & access                        address operator
 
-access ::= 
+access ::=
         NAME                            variable
         ( access )                      parenthesis
         * access                        pointer dereferencing
@@ -338,7 +338,7 @@ const ::=
         null                            null constant
 
 type ::=
-        int                             the int type 
+        int                             the int type
         char                            the char type
 
 
@@ -355,7 +355,7 @@ CSTINT:     [0-9]+
 
 CSTBOOL:    false | true
 
-CSTSTRING:  `"`...`"` 
+CSTSTRING:  `"`...`"`
             with C string escapes \a \b \t \n \v \f \r \" \\ \ddd \uxxxx
 
 OP:         + - * / % = == != < > <= >= && ||

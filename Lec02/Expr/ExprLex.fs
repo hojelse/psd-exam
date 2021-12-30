@@ -1,5 +1,5 @@
 # 1 "ExprLex.fsl"
- 
+
 (* File Expr/Exprlex.fsl
    Lexer specification for the simple expression language.
 *)
@@ -9,7 +9,7 @@ module ExprLex
 open (*Microsoft.*)FSharp.Text.Lexing
 open ExprPar
 
-let lexemeAsString lexbuf = 
+let lexemeAsString lexbuf =
     LexBuffer<char>.LexemeString lexbuf
 
 (* Scan keywords as identifiers and use this function to distinguish them. *)
@@ -23,8 +23,8 @@ let keyword s =
     | _     -> NAME s
 
 # 25 "ExprLex.fs"
-let trans : uint16[] array = 
-    [| 
+let trans : uint16[] array =
+    [|
     (* State 0 *)
      [| 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 1us; 2us; 12us; 12us; 1us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 1us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 9us; 10us; 7us; 5us; 12us; 6us; 12us; 12us; 3us; 3us; 3us; 3us; 3us; 3us; 3us; 3us; 3us; 3us; 12us; 12us; 12us; 8us; 12us; 12us; 12us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 12us; 12us; 12us; 12us; 12us; 12us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 4us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 11us; |];
     (* State 1 *)
@@ -55,71 +55,71 @@ let trans : uint16[] array =
      [| 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 13us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; |];
     (* State 14 *)
      [| 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 14us; 14us; 14us; 14us; 14us; 14us; 14us; 14us; 14us; 14us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; |];
-    |] 
+    |]
 let actions : uint16[] = [|65535us; 0us; 1us; 2us; 3us; 4us; 5us; 6us; 7us; 8us; 9us; 10us; 11us; 3us; 2us; |]
 let _fslex_tables = FSharp.Text.Lexing.UnicodeTables.Create(trans,actions)
-let rec _fslex_dummy () = _fslex_dummy() 
+let rec _fslex_dummy () = _fslex_dummy()
 // Rule Token
 and Token  lexbuf =
   match _fslex_tables.Interpret(0,lexbuf) with
-  | 0 -> ( 
+  | 0 -> (
 # 26 "ExprLex.fsl"
-                                     Token lexbuf 
+                                     Token lexbuf
 # 68 "ExprLex.fs"
           )
-  | 1 -> ( 
+  | 1 -> (
 # 27 "ExprLex.fsl"
-                                     lexbuf.EndPos <- lexbuf.EndPos.NextLine; Token lexbuf 
+                                     lexbuf.EndPos <- lexbuf.EndPos.NextLine; Token lexbuf
 # 73 "ExprLex.fs"
           )
-  | 2 -> ( 
+  | 2 -> (
 # 28 "ExprLex.fsl"
-                                     CSTINT (System.Int32.Parse (lexemeAsString lexbuf)) 
+                                     CSTINT (System.Int32.Parse (lexemeAsString lexbuf))
 # 78 "ExprLex.fs"
           )
-  | 3 -> ( 
+  | 3 -> (
 # 30 "ExprLex.fsl"
-                                     keyword (lexemeAsString lexbuf) 
+                                     keyword (lexemeAsString lexbuf)
 # 83 "ExprLex.fs"
           )
-  | 4 -> ( 
+  | 4 -> (
 # 31 "ExprLex.fsl"
-                                     PLUS  
+                                     PLUS
 # 88 "ExprLex.fs"
           )
-  | 5 -> ( 
+  | 5 -> (
 # 32 "ExprLex.fsl"
-                                     MINUS 
+                                     MINUS
 # 93 "ExprLex.fs"
           )
-  | 6 -> ( 
+  | 6 -> (
 # 33 "ExprLex.fsl"
-                                     TIMES 
+                                     TIMES
 # 98 "ExprLex.fs"
           )
-  | 7 -> ( 
+  | 7 -> (
 # 34 "ExprLex.fsl"
-                                     EQ    
+                                     EQ
 # 103 "ExprLex.fs"
           )
-  | 8 -> ( 
+  | 8 -> (
 # 35 "ExprLex.fsl"
-                                     LPAR  
+                                     LPAR
 # 108 "ExprLex.fs"
           )
-  | 9 -> ( 
+  | 9 -> (
 # 36 "ExprLex.fsl"
-                                     RPAR  
+                                     RPAR
 # 113 "ExprLex.fs"
           )
-  | 10 -> ( 
+  | 10 -> (
 # 37 "ExprLex.fsl"
-                                     EOF   
+                                     EOF
 # 118 "ExprLex.fs"
           )
-  | 11 -> ( 
+  | 11 -> (
 # 38 "ExprLex.fsl"
-                                     failwith "Lexer error: illegal symbol" 
+                                     failwith "Lexer error: illegal symbol"
 # 123 "ExprLex.fs"
           )
   | _ -> failwith "Token"

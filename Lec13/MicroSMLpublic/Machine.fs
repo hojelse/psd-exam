@@ -1,4 +1,4 @@
-(* File MicroSML/Machine.fs 
+(* File MicroSML/Machine.fs
 
    Instructions and code emission for a stack-based
    abstract machine supporting micro-SML including closures
@@ -7,7 +7,7 @@
    nh@itu.dk 2015-12-07
 
    An implementation of the machine is found in file MicroSML/msmlmachine.c.
-   
+
  *)
 
 module Machine
@@ -62,7 +62,7 @@ type instr =
 
 (* Generate new distinct labels *)
 
-let resetLabels, newLabelWName = 
+let resetLabels, newLabelWName =
   let lastlab = ref -1
   ((fun () -> lastlab := 0),
     (fun name -> (lastlab := 1 + !lastlab; (if name="" then "" else name+"_")+"L" + (!lastlab).ToString())))
@@ -72,42 +72,42 @@ let newLabel() = newLabelWName ""
 
 type 'data env = (string * 'data) list
 
-let rec lookup env x = 
-  match env with 
+let rec lookup env x =
+  match env with
   | []         -> failwith ("Machine.lookup: " + x + " not found")
   | (y, v)::yr -> if x=y then v else lookup yr x
 
 (* An instruction list is emitted in two phases:
-   * pass 1 builds an environment labenv mapping labels to addresses 
-   * pass 2 emits the code to file, using the environment labenv to 
+   * pass 1 builds an environment labenv mapping labels to addresses
+   * pass 2 emits the code to file, using the environment labenv to
      resolve labels
  *)
 
 (* These numeric instruction codes must agree with Machine.java: *)
 
-let CODECSTI     = 0 
-let CODEADD      = 1 
-let CODESUB      = 2 
-let CODEMUL      = 3 
-let CODEDIV      = 4 
-let CODEMOD      = 5 
-let CODEEQ       = 6 
-let CODELT       = 7 
-let CODENOT      = 8 
-let CODEDUP      = 9 
-let CODESWAP     = 10 
-let CODELDI      = 11 
-let CODESTI      = 12 
-let CODEGETBP    = 13 
-let CODEGETSP    = 14 
-let CODEINCSP    = 15 
+let CODECSTI     = 0
+let CODEADD      = 1
+let CODESUB      = 2
+let CODEMUL      = 3
+let CODEDIV      = 4
+let CODEMOD      = 5
+let CODEEQ       = 6
+let CODELT       = 7
+let CODENOT      = 8
+let CODEDUP      = 9
+let CODESWAP     = 10
+let CODELDI      = 11
+let CODESTI      = 12
+let CODEGETBP    = 13
+let CODEGETSP    = 14
+let CODEINCSP    = 15
 let CODEGOTO     = 16
 let CODEIFZERO   = 17
-let CODEIFNZRO   = 18 
+let CODEIFNZRO   = 18
 let CODECALL     = 19
 let CODETCALL    = 20
 let CODERET      = 21
-let CODEPRINTI   = 22 
+let CODEPRINTI   = 22
 let CODEPRINTC   = 23
 let CODELDARGS   = 24
 let CODESTOP     = 25;
@@ -129,11 +129,11 @@ let CODETHROW     = 40;
 let CODEPUSHHDLR  = 41;
 let CODEPOPHDLR   = 42;
 
-(* Bytecode emission, first pass: build environment that maps 
+(* Bytecode emission, first pass: build environment that maps
    each label to an integer address in the bytecode.
  *)
 
-let sizeInst instr = 
+let sizeInst instr =
   match instr with
   | Label lab      -> 0
   | CSTI i         -> 2
@@ -163,7 +163,7 @@ let sizeInst instr =
   | PRINTI         -> 1
   | PRINTB         -> 1
   | PRINTC         -> 1
-  | PRINTL         -> 1    
+  | PRINTL         -> 1
   | LDARGS         -> 1
   | STOP           -> 1
   | NIL            -> 1
@@ -181,13 +181,13 @@ let sizeInst instr =
   | POPHDLR        -> 1
 
 let makelabenv (addr, labenv) instr =
-  let size = sizeInst instr      
+  let size = sizeInst instr
   match instr with
   | Label lab -> (addr, (lab, addr) :: labenv)
   | _         -> (addr+size, labenv)
 
 (* Bytecode emission, second pass: output bytecode as integers *)
-let emitints getlab instr ints = 
+let emitints getlab instr ints =
   match instr with
   | Label lab      -> ints
   | CSTI i         -> CODECSTI   :: i :: ints
@@ -217,7 +217,7 @@ let emitints getlab instr ints =
   | PRINTI         -> CODEPRINTI :: ints
   | PRINTB         -> CODEPRINTB :: ints
   | PRINTC         -> CODEPRINTC :: ints
-  | PRINTL         -> CODEPRINTL :: ints  
+  | PRINTL         -> CODEPRINTL :: ints
   | LDARGS         -> CODELDARGS :: ints
   | STOP           -> CODESTOP   :: ints
   | NIL            -> CODENIL    :: ints
@@ -244,15 +244,15 @@ let ppInst (addr,strs) instr =
   | MUL            -> indent "MUL"
   | DIV            -> indent "DIV"
   | MOD            -> indent "MOD"
-  | EQ             -> indent "EQ" 
-  | LT             -> indent "LT" 
+  | EQ             -> indent "EQ"
+  | LT             -> indent "LT"
   | NOT            -> indent "NOT"
   | DUP            -> indent "DUP"
   | SWAP           -> indent "SWAP"
-  | LDI            -> indent "LDI" 
-  | STI            -> indent "STI" 
+  | LDI            -> indent "LDI"
+  | STI            -> indent "STI"
   | GETBP          -> indent "GETBP"
-  | GETSP          -> indent "GETSP" 
+  | GETSP          -> indent "GETSP"
   | INCSP m        -> indent ("INCSP " + m.ToString())
   | GOTO lab       -> indent ("GOTO " + lab)
   | IFZERO lab     -> indent ("IFZERO " + lab)
@@ -265,17 +265,17 @@ let ppInst (addr,strs) instr =
   | PRINTI         -> indent "PRINTI"
   | PRINTB         -> indent "PRINTB"
   | PRINTC         -> indent "PRINTC"
-  | PRINTL         -> indent "PRINTL"  
+  | PRINTL         -> indent "PRINTL"
   | LDARGS         -> indent "LDARGS"
-  | STOP           -> indent "STOP"  
-  | NIL            -> indent "NIL"   
-  | CONS           -> indent "CONS"  
-  | CAR            -> indent "CAR"   
-  | CDR            -> indent "CDR"   
+  | STOP           -> indent "STOP"
+  | NIL            -> indent "NIL"
+  | CONS           -> indent "CONS"
+  | CAR            -> indent "CAR"
+  | CDR            -> indent "CDR"
   | SETCAR         -> indent "SETCAR"
   | SETCDR         -> indent "SETCDR"
   | PUSHLAB lab    -> indent ("PUSHLAB " + lab)
-  | ACLOS n        -> indent ("ACLOS " + n.ToString()) 
+  | ACLOS n        -> indent ("ACLOS " + n.ToString())
   | HEAPSTI n      -> indent ("HEAPSTI " + n.ToString())
   | HEAPLDI n      -> indent ("HEAPLDI " + n.ToString())
   | THROW          -> indent "THROW"

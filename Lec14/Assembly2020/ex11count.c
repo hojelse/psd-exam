@@ -17,7 +17,7 @@
 
 
 void main(int n) {
-  int i; 
+  int i;
   int u;
   int used[100];
   int diag1[100];
@@ -45,24 +45,24 @@ void main(int n) {
 	u = u + 1;
       if (u <= n) { // not used[u]; fill col[i] then try col[i+1]
 	col[i] = u;
-	diag1[u-i+n] = diag2[u+i] = used[u] = true; 
+	diag1[u-i+n] = diag2[u+i] = used[u] = true;
 	i = i+1; u = 1;
       } else {			// backtrack; try to find a new col[i-1]
 	i = i-1;
-	if (i > 0) { 
+	if (i > 0) {
 	  u = col[i];
-	  diag1[u-i+n] = diag2[u+i] = used[u] = false; 	  
+	  diag1[u-i+n] = diag2[u+i] = used[u] = false; 	
 	  u = u+1;
-	} 
+	}
       }
     }
 
     if (i > n) {                // count solution, then backtrack
       count = count + 1;
-      i = i-1; 
-      if (i > 0) { 
+      i = i-1;
+      if (i > 0) {
 	u = col[i];
-	diag1[u-i+n] = diag2[u+i] = used[u] = false; 
+	diag1[u-i+n] = diag2[u+i] = used[u] = false;
 	u = u+1;
       }
     }

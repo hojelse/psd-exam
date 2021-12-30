@@ -10,10 +10,10 @@ A. Generating and compiling the lexer and parser for the expression
 
    fslex --unicode ExprLex.fsl
    fsyacc --module ExprPar ExprPar.fsy
-   fsharpi -r ~/fsharp/FsLexYacc.Runtime.dll Absyn.fs ExprPar.fs ExprLex.fs Parse.fs 
+   fsharpi -r ~/fsharp/FsLexYacc.Runtime.dll Absyn.fs ExprPar.fs ExprLex.fs Parse.fs
 
    open Parse;;
-   fromString "2 + 3 * 4";;     
+   fromString "2 + 3 * 4";;
 
 B. Generating and compiling the lexer and parser for the expression
    language, and loading the interpreter eval, the compiler (to simple

@@ -32,7 +32,7 @@
 .class private auto ansi beforefieldinit ex13
        extends [mscorlib]System.Object
 {
-  .method public hidebysig specialname rtspecialname 
+  .method public hidebysig specialname rtspecialname
           instance void  .ctor() cil managed
   {
     // Code size       7 (0x7)
@@ -93,7 +93,7 @@
 .class private auto ansi beforefieldinit InOut
        extends [mscorlib]System.Object
 {
-  .method public hidebysig specialname rtspecialname 
+  .method public hidebysig specialname rtspecialname
           instance void  .ctor() cil managed
   {
     // Code size       7 (0x7)

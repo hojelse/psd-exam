@@ -2,7 +2,7 @@
 //
 // Compile with:
 //   csc Parameters.cs
-// Run with: 
+// Run with:
 //   Parameters 11 22
 
 using System;
@@ -11,12 +11,12 @@ class Parameters {
   public static void Main(String[] args) {
     int a = int.Parse(args[0]);
     int b = int.Parse(args[1]);
-    // After the call to swapV, variables a and b are unchanged 
+    // After the call to swapV, variables a and b are unchanged
     Console.WriteLine("a = " + a + "  b = " + b);
     swapV(a, b);
     Console.WriteLine("a = " + a + "  b = " + b);
     Console.WriteLine("----------------------------------------");
-    // After the call to swapR, the values of a and b have been swapped 
+    // After the call to swapR, the values of a and b have been swapped
     Console.WriteLine("a = " + a + "  b = " + b);
     swapR(ref a, ref b);
     Console.WriteLine("a = " + a + "  b = " + b);

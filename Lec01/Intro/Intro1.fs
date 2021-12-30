@@ -4,7 +4,7 @@
 
 module Intro1
 
-type expr = 
+type expr =
   | CstI of int
   | Prim of string * expr * expr;;
 
@@ -40,9 +40,9 @@ let rec evalm (e : expr) : int =
     | CstI i -> i
     | Prim("+", e1, e2) -> evalm e1 + evalm e2
     | Prim("*", e1, e2) -> evalm e1 * evalm e2
-    | Prim("-", e1, e2) -> 
+    | Prim("-", e1, e2) ->
       let res = evalm e1 - evalm e2
-      if res < 0 then 0 else res 
+      if res < 0 then 0 else res
     | Prim _            -> failwith "unknown primitive";;
 
 
@@ -57,4 +57,4 @@ let rec fmt (e : expr) : string =
   | Prim("*", e1, e2) -> "(" + fmt e1 + "*" + fmt e2 + ")"
   | Prim("-", e1, e2) -> "(" + fmt e1 + "-" + fmt e2 + ")"
   | Prim _            -> failwith "fmt: unknown primitive";;
-  
+

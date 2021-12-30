@@ -1,4 +1,4 @@
-// 
+//
 // sestoft@itu.dk * 2009-10-21
 
 using System;

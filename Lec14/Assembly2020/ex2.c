@@ -21,7 +21,7 @@ void main() {
   print *p;                             // 12
   p = ia;                               // now p points to ia[0]
   *ia = 14;                             // now ia[0] is 14
-  print ia[0];                          // 14              
+  print ia[0];                          // 14
   *(ia+9) = 114;                        // now ia[9] is 114
   print ia[9];                          // 114
   ipa[2] = p;                           // now ipa[2] points to i

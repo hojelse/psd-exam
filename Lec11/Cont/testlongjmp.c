@@ -8,10 +8,10 @@
 #include <setjmp.h>
 
 /* When f is called with a positive even argument such as 10, it
-   calls itself recursively 
+   calls itself recursively
 
 	f(10) --> f(8) --> f(6) --> f(4) --> f(2) --> f(0)
-   
+
    and then returns along the call chain, printing messages on the
    way as required by the normal continuation.
 
@@ -28,7 +28,7 @@
 jmp_buf env;
 
 void f(int i) {
-  if (i == 0) { 
+  if (i == 0) {
     printf("reached 0\n");
   } else if (i == 1) {
     printf("reached 1\n");
@@ -41,10 +41,10 @@ void f(int i) {
 
 int main(int argc, char* argv[]) {
   int i = atoi(argv[1]);
-  
-  if (setjmp(env) == 0) { 
+
+  if (setjmp(env) == 0) {
     /* Just after the original call to setjmp(env) we reach this point */
-    f(i); 
+    f(i);
   } else {
     /* When and if longjmp is called, we get to this point */
     printf("longjmp was called\n");

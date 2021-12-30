@@ -17,9 +17,9 @@
 
    * All function arguments are passed on the stack.
 
-   * There is no optimized register allocation across expressions and statements. 
+   * There is no optimized register allocation across expressions and statements.
 
-   * We use all 32-bit registers of the x86-64 architecture.  
+   * We use all 32-bit registers of the x86-64 architecture.
 
    * We use the native x86 call and ret instructions, which means that
      we must pust some prologue code at each function start to obey
@@ -124,7 +124,7 @@ let rec preserveAll pres code =
 
 (* Generate new distinct labels *)
 
-let (resetLabels, newLabel) = 
+let (resetLabels, newLabel) =
     let lastlab = ref -1
     ((fun () -> lastlab := 0), (fun () -> (lastlab := 1 + !lastlab; "L" + string(!lastlab))))
 
@@ -162,7 +162,7 @@ let x86instr2int out instr =
       | PRINTC         -> List.iter outins [ "call_prolog"; "call " + printc; "call_epilog"]
 
 (* Convert instruction list to list of assembly code fragments *)
- 
+
 let code2x86asm (code : x86 list) : string list =
     let bytecode = ref []
     let outinstr i   = (bytecode := i :: !bytecode)

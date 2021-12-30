@@ -7,9 +7,9 @@ let queens n =
     if y = 0 then
       boards
     else
-      let boards' = boards 
+      let boards' = boards
                     |> Seq.collect(fun board -> [1 .. n] |> Seq.map(fun x -> (x,y),board))
-                    |> Seq.filter validSolution 
+                    |> Seq.filter validSolution
                     |> Seq.map(fun (pos, xs) -> pos::xs)
       loop boards' (y - 1)
   loop (Seq.singleton([])) n |> Seq.map (List.rev >> List.map fst)

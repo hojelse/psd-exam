@@ -16,9 +16,9 @@ import java.io.*;
 import java.util.*;
 
 class Machine {
-  public static void main(String[] args)        
+  public static void main(String[] args)
     throws FileNotFoundException, IOException {
-    if (args.length == 0) 
+    if (args.length == 0)
       System.out.println("Usage: java Machine <programfile> <arg1> ...\n");
     else
       execute(args, false);
@@ -26,22 +26,22 @@ class Machine {
 
   // These numeric instruction codes must agree with Machine.fs:
 
-  final static int 
-    CSTI = 0, ADD = 1, SUB = 2, MUL = 3, DIV = 4, MOD = 5, 
-    EQ = 6, LT = 7, NOT = 8, 
-    DUP = 9, SWAP = 10, 
-    LDI = 11, STI = 12, 
-    GETBP = 13, GETSP = 14, INCSP = 15, 
-    GOTO = 16, IFZERO = 17, IFNZRO = 18, CALL = 19, TCALL = 20, RET = 21, 
-    PRINTI = 22, PRINTC = 23, 
+  final static int
+    CSTI = 0, ADD = 1, SUB = 2, MUL = 3, DIV = 4, MOD = 5,
+    EQ = 6, LT = 7, NOT = 8,
+    DUP = 9, SWAP = 10,
+    LDI = 11, STI = 12,
+    GETBP = 13, GETSP = 14, INCSP = 15,
+    GOTO = 16, IFZERO = 17, IFNZRO = 18, CALL = 19, TCALL = 20, RET = 21,
+    PRINTI = 22, PRINTC = 23,
     LDARGS = 24,
     STOP = 25;
 
   final static int STACKSIZE = 1000;
-  
+
   // Read code from file and execute it
 
-  static void execute(String[] args, boolean trace) 
+  static void execute(String[] args, boolean trace)
     throws FileNotFoundException, IOException {
     int[] p = readfile(args[0]);                // Read the program from file
     int[] s = new int[STACKSIZE];               // The evaluation stack
@@ -54,38 +54,38 @@ class Machine {
     System.err.println("\nRan " + runtime/1000.0 + " seconds");
   }
 
-  // The machine: execute the code starting at p[pc] 
+  // The machine: execute the code starting at p[pc]
 
   static int execcode(int[] p, int[] s, int[] iargs, boolean trace) {
-    int bp = -999;	// Base pointer, for local variable access 
+    int bp = -999;	// Base pointer, for local variable access
     int sp = -1;	// Stack top pointer
     int pc = 0;		// Program counter: next instruction
     for (;;) {
-      if (trace) 
+      if (trace)
         printsppc(s, bp, sp, p, pc);
       switch (p[pc++]) {
       case CSTI:
         s[sp+1] = p[pc++]; sp++; break;
-      case ADD: 
+      case ADD:
         s[sp-1] = s[sp-1] + s[sp]; sp--; break;
-      case SUB: 
+      case SUB:
         s[sp-1] = s[sp-1] - s[sp]; sp--; break;
-      case MUL: 
+      case MUL:
         s[sp-1] = s[sp-1] * s[sp]; sp--; break;
-      case DIV: 
+      case DIV:
         s[sp-1] = s[sp-1] / s[sp]; sp--; break;
-      case MOD: 
+      case MOD:
         s[sp-1] = s[sp-1] % s[sp]; sp--; break;
-      case EQ: 
+      case EQ:
         s[sp-1] = (s[sp-1] == s[sp] ? 1 : 0); sp--; break;
-      case LT: 
+      case LT:
         s[sp-1] = (s[sp-1] < s[sp] ? 1 : 0); sp--; break;
-      case NOT: 
+      case NOT:
         s[sp] = (s[sp] == 0 ? 1 : 0); break;
-      case DUP: 
+      case DUP:
         s[sp+1] = s[sp]; sp++; break;
-      case SWAP: 
-        { int tmp = s[sp];  s[sp] = s[sp-1];  s[sp-1] = tmp; } break; 
+      case SWAP:
+        { int tmp = s[sp];  s[sp] = s[sp-1];  s[sp-1] = tmp; } break;
       case LDI:                 // load indirect
         s[sp] = s[s[sp]]; break;
       case STI:                 // store indirect, keep value on top
@@ -102,39 +102,39 @@ class Machine {
         pc = (s[sp--] == 0 ? p[pc] : pc+1); break;
       case IFNZRO:
         pc = (s[sp--] != 0 ? p[pc] : pc+1); break;
-      case CALL: { 
+      case CALL: {
         int argc = p[pc++];
         for (int i=0; i<argc; i++)	   // Make room for return address
           s[sp-i+2] = s[sp-i];		   // and old base pointer
-        s[sp-argc+1] = pc+1; sp++; 
-        s[sp-argc+1] = bp;   sp++; 
+        s[sp-argc+1] = pc+1; sp++;
+        s[sp-argc+1] = bp;   sp++;
         bp = sp+1-argc;
-        pc = p[pc]; 
-      } break; 
-      case TCALL: { 
+        pc = p[pc];
+      } break;
+      case TCALL: {
         int argc = p[pc++];                // Number of new arguments
         int pop  = p[pc++];		   // Number of variables to discard
         for (int i=argc-1; i>=0; i--)	   // Discard variables
           s[sp-i-pop] = s[sp-i];
-        sp = sp - pop; pc = p[pc]; 
-      } break; 
-      case RET: { 
-        int res = s[sp]; 
-        sp = sp-p[pc]; bp = s[--sp]; pc = s[--sp]; 
-        s[sp] = res; 
-      } break; 
+        sp = sp - pop; pc = p[pc];
+      } break;
+      case RET: {
+        int res = s[sp];
+        sp = sp-p[pc]; bp = s[--sp]; pc = s[--sp];
+        s[sp] = res;
+      } break;
       case PRINTI:
-        System.out.print(s[sp] + " "); break; 
+        System.out.print(s[sp] + " "); break;
       case PRINTC:
-        System.out.print((char)(s[sp])); break; 
+        System.out.print((char)(s[sp])); break;
       case LDARGS:
 	for (int i=0; i<iargs.length; i++) // Push commandline arguments
 	  s[++sp] = iargs[i];
 	break;
       case STOP:
         return sp;
-      default:                  
-        throw new RuntimeException("Illegal instruction " + p[pc-1] 
+      default:
+        throw new RuntimeException("Illegal instruction " + p[pc-1]
                                    + " at address " + (pc-1));
       }
     }
@@ -144,7 +144,7 @@ class Machine {
 
   static String insname(int[] p, int pc) {
     switch (p[pc]) {
-    case CSTI:   return "CSTI " + p[pc+1]; 
+    case CSTI:   return "CSTI " + p[pc+1];
     case ADD:    return "ADD";
     case SUB:    return "SUB";
     case MUL:    return "MUL";
@@ -181,12 +181,12 @@ class Machine {
     for (int i=0; i<=sp; i++)
       System.out.print(s[i] + " ");
     System.out.print("]");
-    System.out.println("{" + pc + ": " + insname(p, pc) + "}"); 
+    System.out.println("{" + pc + ": " + insname(p, pc) + "}");
   }
 
   // Read instructions from a file
 
-  public static int[] readfile(String filename) 
+  public static int[] readfile(String filename)
     throws FileNotFoundException, IOException
   {
     ArrayList<Integer> rawprogram = new ArrayList<Integer>();
@@ -195,7 +195,7 @@ class Machine {
     tstream.parseNumbers();
     tstream.nextToken();
     while (tstream.ttype == StreamTokenizer.TT_NUMBER) {
-	rawprogram.add(Integer.valueOf((int)tstream.nval)) ;; 
+	rawprogram.add(Integer.valueOf((int)tstream.nval)) ;;
 	tstream.nextToken();
     }
     inp.close();
@@ -210,9 +210,9 @@ class Machine {
 // Run the machine with tracing: print each instruction as it is executed
 
 class Machinetrace {
-  public static void main(String[] args)        
+  public static void main(String[] args)
     throws FileNotFoundException, IOException {
-    if (args.length == 0) 
+    if (args.length == 0)
       System.out.println("Usage: java Machinetrace <programfile> <arg1> ...\n");
     else
       Machine.execute(args, true);

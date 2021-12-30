@@ -4,6 +4,6 @@ void main(int n) {
   if (n!=0) {
     print n;
     main(n-1);
-  } else 
+  } else
     print 999999;
 }

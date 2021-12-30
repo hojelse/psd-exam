@@ -31,12 +31,12 @@
     * All integers are tagged with a 1 bit in the least significant
       position, regardless of whether they represent program integers,
       return addresses, array base addresses or old base pointers
-      (into the stack).  
+      (into the stack).
     * All heap references are word-aligned, that is, the two least
-      significant bits of a heap reference are 00.  
+      significant bits of a heap reference are 00.
     * Integer constants and code addresses in the program array
       p[...] are not tagged.
-   The distinction between integers and references is necessary for 
+   The distinction between integers and references is necessary for
    the garbage collector to be precise (not conservative).
 
    The heap consists of 64-bit words, and the heap is divided into
@@ -47,7 +47,7 @@
    ttttttttnnnnnnnnnnnnnnnnnnnnnnnngg
    and for 64 bits
    ttttttttnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnngg
-   where 
+   where
     - tttttttt is the block tag, all 0 for cons cells
     - nn....nn is the block length (excluding header). 22 bits for 32 bit
                and 54 bits for 64 bit.
@@ -59,8 +59,8 @@
    gg=11=Black: block is live (after mark, before sweep)
    gg=11=Blue:  block is on the freelist or orphaned
 
-   A block of length zero is an orphan; it cannot be used 
-   for data and cannot be on the freelist.  An orphan is 
+   A block of length zero is an orphan; it cannot be used
+   for data and cannot be on the freelist.  An orphan is
    created when allocating all but the last word of a free block.
 */
 
@@ -124,7 +124,7 @@ word* readfile(char* filename);
   #include "utils_win.c"
 #else
   #include "utils_unix.c"
-#endif 
+#endif
 
 #if defined(ENV32)
   #define IsInt(v) (((v)&1)==1)
@@ -216,11 +216,11 @@ int silent=0; /* Glocal boolean value to run the interpreter in silent mode. Def
 
 // We check for stack overflow in execcode inbetween execution of two byte code instructions.
 // Such instructions can increate the stack arbitraily, e.g., INCSP. The STACKSAFETYSIZE
-// is to have a buffer for this not to happen. 
+// is to have a buffer for this not to happen.
 
 #define STACKSAFETYSIZE 200
 #define STACKSIZE 2000000
-  
+
 // Print the stack machine instruction at p[pc]
 
 void printInstruction(word p[], word pc) {
@@ -253,7 +253,7 @@ void printInstruction(word p[], word pc) {
   case PRINTI: printf("PRINTI"); break;
   case PRINTB: printf("PRINTB"); break;
   case PRINTC: printf("PRINTC"); break;
-  case PRINTL: printf("PRINTL"); break;    
+  case PRINTL: printf("PRINTL"); break;
   case LDARGS: printf("LDARGS"); break;
   case STOP:   printf("STOP"); break;
   case NIL:    printf("NIL"); break;
@@ -264,14 +264,14 @@ void printInstruction(word p[], word pc) {
   case SETCDR: printf("SETCDR"); break;
   case PUSHLAB: printf("PUSHLAB " WORD_FMT, p[pc+1]); break;
   case HEAPSTI: printf("HEAPSTI " WORD_FMT, p[pc+1]); break;
-  case HEAPLDI: printf("HEAPLDI " WORD_FMT, p[pc+1]); break;    
+  case HEAPLDI: printf("HEAPLDI " WORD_FMT, p[pc+1]); break;
   case ACLOS:   printf("ACLOS " WORD_FMT, p[pc+1]); break;
   case CLOSCALL: printf("CLOSCALL " WORD_FMT, p[pc+1]); break;
   case TCLOSCALL: printf("TCLOSCALL " WORD_FMT, p[pc+1]); break;
   case THROW:     printf("THROW"); break;
   case PUSHHDLR:  printf("PUSHHDLR " WORD_FMT, p[pc+1]); break;
   case POPHDLR:   printf("POPHDLR"); break;
-  default:     printf("<unknown> " WORD_FMT, p[pc]); break; 
+  default:     printf("<unknown> " WORD_FMT, p[pc]); break;
   }
 }
 
@@ -284,9 +284,9 @@ void printStackAndPc(word s[], word bp, word sp, word p[], word pc) {
     if (IsInt(s[i]))
       printf(WORD_FMT " ", Untag(s[i]));
     else
-      printf("#" WORD_FMT " ", s[i]);      
+      printf("#" WORD_FMT " ", s[i]);
   printf("]");
-  printf("{" WORD_FMT ":", pc); printInstruction(p, pc); printf("}\n"); 
+  printf("{" WORD_FMT ":", pc); printInstruction(p, pc); printf("}\n");
 }
 
 // Tags and values
@@ -311,7 +311,7 @@ void printB(word i) {
     exit(-1);
   }
   return;
-}       
+}
 
 void printC(word i) {
   if IsInt(i) {
@@ -329,7 +329,7 @@ void printL(word i) {
     printf("[]");
   } else {
     word *consPtr = (word *)i;
-    int done;    
+    int done;
     if (!(BlockTag(*consPtr) == CONSTAG)) {
       printf("PRINTL: Expected CONSTAG.\n");
       exit(-1);
@@ -353,11 +353,11 @@ void printL(word i) {
 	done = 1;
     } while (!done);
     printf("]");
-  } 
+  }
   return;
 }
 
-// Garbage collection and heap allocation 
+// Garbage collection and heap allocation
 
 int inHeap(word* p) {
   return heap <= p && p < afterHeap;
@@ -366,20 +366,20 @@ int inHeap(word* p) {
 // Call this after a GC to get heap statistics:
 
 void heapStatistics() {
-  word blocks = 0, free = 0, orphans = 0, 
+  word blocks = 0, free = 0, orphans = 0,
     blocksSize = 0, freeSize = 0, largestFree = 0;
   word* heapPtr = heap;
-  word* freePtr;  
+  word* freePtr;
   while (heapPtr < afterHeap) {
-    word* nextBlock;    
+    word* nextBlock;
     if (Length(heapPtr[0]) > 0) {
       blocks++;
       blocksSize += Length(heapPtr[0]);
-    } else 
+    } else
       orphans++;
     nextBlock = heapPtr + Length(heapPtr[0]) + 1;
     if (nextBlock > afterHeap) {
-      printf("heapStatistics HEAP ERROR: block at heap[" WORD_FMT "] (" WORD_FMT "), length " WORD_FMT " extends beyond heap\n", 
+      printf("heapStatistics HEAP ERROR: block at heap[" WORD_FMT "] (" WORD_FMT "), length " WORD_FMT " extends beyond heap\n",
 	     (word)(heapPtr-heap),(word)&heapPtr[0], Length(heapPtr[0]));
       exit(-1);
     }
@@ -388,10 +388,10 @@ void heapStatistics() {
   freePtr = freelist;
   while (freePtr != 0) {
     int length;
-    free++; 
+    free++;
     length = Length(freePtr[0]);
     if (freePtr < heap || afterHeap < freePtr+length+1) {
-      printf("HEAP ERROR: freelist item " WORD_FMT " (at heap[" WORD_FMT "], length %d) is outside heap\n", 
+      printf("HEAP ERROR: freelist item " WORD_FMT " (at heap[" WORD_FMT "], length %d) is outside heap\n",
 	     free, (word)(freePtr-heap), length);
       exit(-1);
     }
@@ -402,7 +402,7 @@ void heapStatistics() {
     freePtr = (word*)freePtr[1];
   }
   if (!silent)
-    printf("Heap: " WORD_FMT " blocks (" WORD_FMT " words); of which " WORD_FMT " free (" WORD_FMT " words, largest " WORD_FMT " words); " WORD_FMT " orphans\n", 
+    printf("Heap: " WORD_FMT " blocks (" WORD_FMT " words); of which " WORD_FMT " free (" WORD_FMT " words, largest " WORD_FMT " words); " WORD_FMT " orphans\n",
 	   blocks, blocksSize, free, freeSize, largestFree, orphans);
 }
 
@@ -462,11 +462,11 @@ word* allocate(unsigned int tag, uword length, word s[], word sp) {
   printf("Out of memory\n");
   exit(1);
 }
-  
-// The machine: execute the code starting at p[pc] 
+
+// The machine: execute the code starting at p[pc]
 
 int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trace) {
-  word bp = -999;        // Base pointer, for local variable access 
+  word bp = -999;        // Base pointer, for local variable access
   word sp = -1;          // Stack top pointer
   word pc = 0;           // Program counter: next instruction
   word hr = -1;          // Handler Register
@@ -475,33 +475,33 @@ int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trac
       printf("Stack overflow");
       return 0;
     }
-    if (trace) 
+    if (trace)
       printStackAndPc(s, bp, sp, p, pc);
     switch (p[pc++]) {
     case CSTI:
       s[sp+1] = Tag(p[pc++]); sp++; break;
-    case ADD: 
+    case ADD:
       s[sp-1] = Tag(Untag(s[sp-1]) + Untag(s[sp])); sp--; break;
-    case SUB: 
+    case SUB:
       s[sp-1] = Tag(Untag(s[sp-1]) - Untag(s[sp])); sp--; break;
-    case MUL: 
+    case MUL:
       s[sp-1] = Tag(Untag(s[sp-1]) * Untag(s[sp])); sp--; break;
-    case DIV: 
+    case DIV:
       s[sp-1] = Tag(Untag(s[sp-1]) / Untag(s[sp])); sp--; break;
-    case MOD: 
+    case MOD:
       s[sp-1] = Tag(Untag(s[sp-1]) % Untag(s[sp])); sp--; break;
-    case EQ: 
+    case EQ:
       s[sp-1] = Tag(s[sp-1] == s[sp] ? 1 : 0); sp--; break;
-    case LT: 
+    case LT:
       s[sp-1] = Tag(s[sp-1] < s[sp] ? 1 : 0); sp--; break;
     case NOT: {
       word v = s[sp];
       s[sp] = Tag((IsInt(v) ? Untag(v) == 0 : v == 0) ? 1 : 0);
     } break;
-    case DUP: 
+    case DUP:
       s[sp+1] = s[sp]; sp++; break;
-    case SWAP: 
-      { word tmp = s[sp];  s[sp] = s[sp-1];  s[sp-1] = tmp; } break; 
+    case SWAP:
+      { word tmp = s[sp];  s[sp] = s[sp-1];  s[sp-1] = tmp; } break;
     case LDI:                 // load indirect
       s[sp] = s[Untag(s[sp])]; break;
     case STI:                 // store indirect, keep value on top
@@ -514,37 +514,37 @@ int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trac
       sp = sp+p[pc++]; break;
     case GOTO:
       pc = p[pc]; break;
-    case IFZERO: { 
+    case IFZERO: {
       word v = s[sp--];
-      pc = (IsInt(v) ? Untag(v) == 0 : v == 0) ? p[pc] : pc+1; 
+      pc = (IsInt(v) ? Untag(v) == 0 : v == 0) ? p[pc] : pc+1;
     } break;
-    case IFNZRO: { 
+    case IFNZRO: {
       word v = s[sp--];
-      pc = (IsInt(v) ? Untag(v) != 0 : v != 0) ? p[pc] : pc+1; 
+      pc = (IsInt(v) ? Untag(v) != 0 : v != 0) ? p[pc] : pc+1;
     } break;
-    case CALL: { 
+    case CALL: {
       word argc = p[pc++];
       int i;
       for (i=0; i<argc; i++)               // Make room for return address
         s[sp-i+2] = s[sp-i];               // and old base pointer
-      s[sp-argc+1] = Tag(pc+1); sp++; 
-      s[sp-argc+1] = Tag(bp);   sp++; 
+      s[sp-argc+1] = Tag(pc+1); sp++;
+      s[sp-argc+1] = Tag(bp);   sp++;
       bp = sp+1-argc;
-      pc = p[pc]; 
-    } break; 
-    case TCALL: { 
+      pc = p[pc];
+    } break;
+    case TCALL: {
       word argc = p[pc++];                  // Number of new arguments
       word pop  = sp-bp; /* BUG */                   // Number of variables to discard
       word i;
       for (i=argc-1; i>=0; i--)    // Discard variables
         s[sp-i-pop] = s[sp-i];
-      sp = sp - pop; pc = p[pc]; 
-    } break; 
-    case RET: { 
+      sp = sp - pop; pc = p[pc];
+    } break;
+    case RET: {
       word res = s[sp];
-      sp = sp-p[pc]; bp = Untag(s[--sp]); pc = Untag(s[--sp]); 
-      s[sp] = res; 
-    } break; 
+      sp = sp-p[pc]; bp = Untag(s[--sp]); pc = Untag(s[--sp]);
+      s[sp] = res;
+    } break;
     case PRINTI:
       printI(s[sp]); break;
     case PRINTB:
@@ -561,35 +561,35 @@ int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trac
     case STOP:
       printf("\nResult value: " WORD_FMT, Untag(s[sp]));
       return 0;
-    case NIL:    
+    case NIL:
       s[sp+1] = NILVALUE; sp++; break;
     case CONS: {
-      word* p = allocate(CONSTAG, 2, s, sp); 
+      word* p = allocate(CONSTAG, 2, s, sp);
       p[1] = (word)s[sp-1];
       p[2] = (word)s[sp];
       s[sp-1] = (word)p;
       sp--;
     } break;
     case CAR: {
-      word* p = (word*)s[sp]; 
-      if (p == 0) 
+      word* p = (word*)s[sp];
+      if (p == 0)
         { printf("Cannot take car of null\n"); return -1; }
       s[sp] = (word)(p[1]);
     } break;
     case CDR: {
-      word* p = (word*)s[sp]; 
-      if (p == 0) 
+      word* p = (word*)s[sp];
+      if (p == 0)
         { printf("Cannot take cdr of null\n"); return -1; }
       s[sp] = (word)(p[2]);
     } break;
     case SETCAR: {
       word v = (word)s[sp--];
-      word* p = (word*)s[sp]; 
+      word* p = (word*)s[sp];
       p[1] = v;
     } break;
     case SETCDR: {
       word v = (word)s[sp--];
-      word* p = (word*)s[sp]; 
+      word* p = (word*)s[sp];
       p[2] = v;
     } break;
     case PUSHLAB: {
@@ -617,7 +617,7 @@ int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trac
       for (i=0;i<n;i++)
 	// Init storage scalar values in case gc is invoked before data is filled in with HEAPSTI.
 	// Could happen with mutually recursive functions.
-	ptr[i+1] = Tag(0); 
+	ptr[i+1] = Tag(0);
       s[++sp] = (word)ptr;
     } break;
     case CLOSCALL: {
@@ -627,12 +627,12 @@ int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trac
       argc++;                              // Closure is additional first argument.
       for (i=0; i<argc; i++)           // Make room for return address
         s[sp-i+2] = s[sp-i];               // and old base pointer
-      s[sp-argc+1] = Tag(pc); sp++; 
-      s[sp-argc+1] = Tag(bp); sp++; 
+      s[sp-argc+1] = Tag(pc); sp++;
+      s[sp-argc+1] = Tag(bp); sp++;
       bp = sp+1-argc;
       cp = (word*)s[bp];             // cp is pointer to closure.
       pc = Untag(cp[1]);                   // Label is a tagged scalar at index 1, see PUSHLAB.
-      //	printf("\n pc=%d, hr=%d, sp=%d, bp=%d\n", pc, hr, sp, bp);		      
+      //	printf("\n pc=%d, hr=%d, sp=%d, bp=%d\n", pc, hr, sp, bp);		
     } break;
     case TCLOSCALL: {
       word argc = p[pc++];
@@ -649,7 +649,7 @@ int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trac
       sp = sp - pop;
       cp = (word*)s[bp];             // cp is pointer to closure.
       pc = Untag(cp[1]);                   // Label is a tagged scalar at index 1, see PUSHLAB.
-      //	printf("\n pc=%d, hr=%d, sp=%d, bp=%d\n", pc, hr, sp, bp);		      
+      //	printf("\n pc=%d, hr=%d, sp=%d, bp=%d\n", pc, hr, sp, bp);		
     } break;
     case THROW: { // stack,exnVal1,exnlab,prevHr,...,exnVal2 -> stack if exnVal1 = exnVal2
       word exn = Untag(s[sp]);
@@ -659,8 +659,8 @@ int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trac
       if (hr != -1) {           // Found a handler for exn
         pc = Untag(s[hr+1]);    //   execute the handler code (exnlab)
 	sp = hr-1; 	       //    after popping frames above hr
-	hr = Untag(s[hr+2]);    //   with current handler being hr 
-	while (bp > sp)  
+	hr = Untag(s[hr+2]);    //   with current handler being hr
+	while (bp > sp)
 	  bp = Untag(s[bp-1]);  // Restore bp to stack frame containing the exception handler description.
       } else {
 	printf("\nResult value: Uncaught exception " WORD_FMT, exn);
@@ -668,7 +668,7 @@ int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trac
       }
     } break;
     case PUSHHDLR: { // stack,exn  -> stack,exn,lab,prevHr
-      //	printf("\n pc=%d, hr=%d, sp=%d, bp=%d\n", pc, hr, sp, bp);		      
+      //	printf("\n pc=%d, hr=%d, sp=%d, bp=%d\n", pc, hr, sp, bp);		
       s[++sp] = (word)(Tag(p[pc++]));
       s[++sp] = Tag(hr);
       hr = sp-2;
@@ -678,7 +678,7 @@ int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trac
       s[sp-3] = s[sp];
       sp = sp - 3;
     } break;
-    default:                  
+    default:
       printf("Illegal instruction " WORD_FMT " at address " WORD_FMT " (" WORD_FMT ")\n", p[pc-1], pc-1, (word)&p[pc-1]);
       heapStatistics();
       return -1;
@@ -692,10 +692,10 @@ int execute(int argc, char** argv, int /* boolean */ trace) {
   int filenameidx = 1 + (trace?1:0) + (silent?1:0); /* Index to filename depends on interpreter options. */
   int argsidx = filenameidx+1; /* Index to extra program arguments depends on interpreter options. */
   word *p = readfile(argv[filenameidx/*trace ? 2 : 1*/]);         // program bytecodes: int[]
-  word *s = (word*)malloc(sizeof(word)*(STACKSIZE+STACKSAFETYSIZE));   // stack: int[] 
+  word *s = (word*)malloc(sizeof(word)*(STACKSIZE+STACKSAFETYSIZE));   // stack: int[]
   int iargc = argc-argsidx; /*trace ? argc - 3 : argc - 2;*/
   word *iargs = (word*)malloc(sizeof(word)*iargc);   // program inputs: int[]
-  
+
   int i;
   int t1, t2;
   int res;
@@ -732,7 +732,7 @@ int main(int argc, char** argv) {
     printf("Size of word, word* is neither 32 nor 64 bit, cannot run\n");
     return -1;
   #endif
-  
+
   if (argc < 2) {
     printf("msmlmachine for " PPARCH "\n");
     printf(PPCOMP "\n");

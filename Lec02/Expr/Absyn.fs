@@ -1,10 +1,10 @@
 (* File Expr/Absyn.fs
-   Abstract syntax for the simple expression language 
+   Abstract syntax for the simple expression language
  *)
 
 module Absyn
 
-type expr = 
+type expr =
   | CstI of int
   | Var of string
   | Let of string * expr * expr

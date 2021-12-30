@@ -5,5 +5,5 @@ begin
   let
   in
     print 42
-  end	    
-end  
+  end	
+end

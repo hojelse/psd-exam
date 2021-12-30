@@ -13,7 +13,7 @@
      * coExec2 allows exceptions to be thrown and caught; this is
        implemented using two continuations: the success continuation
        is used by ordinary computations, and the error continuation is
-       used when an exception is thrown.  
+       used when an exception is thrown.
 *)
 
 module Contimp
@@ -32,18 +32,18 @@ let setSto (store : naivestore) (k, v) = store.Add(k, v)
 (* A computation may terminate normally or throw an exception: *)
 
 type answer =
-  | Terminate 
+  | Terminate
   | Abort of string
 
-type exn = 
+type exn =
   | Exn of string
 
-type expr = 
+type expr =
   | CstI of int
   | Var of string
   | Prim of string * expr * expr
 
-type stmt = 
+type stmt =
   | Asgn of string * expr
   | If of expr * stmt * stmt
   | Block of stmt list
@@ -77,44 +77,44 @@ let rec eval e (store : naivestore) : int =
    * A success continuation cont, for normal termination.  By
      discarding the continuation, it can terminate abnormally (when
      executing a Throw statement), but it cannot catch thrown
-     exceptions (because it has no error continuation).  
+     exceptions (because it has no error continuation).
 *)
 
 let rec coExec1 stmt store (cont : naivestore -> answer) : answer =
     match stmt with
-    | Asgn(x, e) -> 
+    | Asgn(x, e) ->
       cont (setSto store (x, eval e store))
-    | If(e1, stmt1, stmt2) -> 
-      if eval e1 store <> 0 then 
+    | If(e1, stmt1, stmt2) ->
+      if eval e1 store <> 0 then
           coExec1 stmt1 store cont
       else
           coExec1 stmt2 store cont
-    | Block stmts -> 
-      let rec loop ss sto = 
-              match ss with 
+    | Block stmts ->
+      let rec loop ss sto =
+              match ss with
               | []     -> cont sto
-              | s1::sr -> coExec1 s1 sto (fun sto -> loop sr sto) 
+              | s1::sr -> coExec1 s1 sto (fun sto -> loop sr sto)
       loop stmts store
-    | For(x, estart, estop, body) -> 
+    | For(x, estart, estop, body) ->
       let start = eval estart store
       let stop  = eval estop  store
-      let rec loop i sto = 
+      let rec loop i sto =
               if i > stop then cont sto
               else coExec1 body (setSto sto (x, i)) (fun sto -> loop (i+1) sto)
-      loop start store 
-    | While(e, body) -> 
+      loop start store
+    | While(e, body) ->
       let rec loop sto =
               if eval e sto = 0 then cont sto
               else coExec1 body sto loop
-      loop store 
-    | Print e -> 
+      loop store
+    | Print e ->
       (printf "%d\n" (eval e store); cont store)
-    | Throw (Exn s) -> 
+    | Throw (Exn s) ->
       Abort ("Uncaught exception: " + s)
-    | TryCatch _ -> 
+    | TryCatch _ ->
       Abort "TryCatch is not implemented"
 
-let run1 stmt : answer = 
+let run1 stmt : answer =
     coExec1 stmt emptystore (fun _ -> Terminate)
 
 
@@ -125,67 +125,67 @@ let run1 stmt : answer =
    * A success continuation cont, for normal termination.  By
      discarding the continuation, it can terminate abnormally (when
      executing a Throw statement), but it cannot catch thrown
-     exceptions (because it has no error continuation).  
+     exceptions (because it has no error continuation).
    * An error continuation econt for abnormal termination.  The error
      continuation receives the exception and the store, and decides
      whether it wants to catch the exception or not.  In the former
      case it executes the handler's statement body; in the latter case
      it re-raises the exception, by applying the handler's own error
-     continuation.  
+     continuation.
 *)
 
 let rec coExec2 stmt (store : naivestore)
-         (cont : naivestore -> answer) 
+         (cont : naivestore -> answer)
          (econt : exn * naivestore -> answer) : answer =
     match stmt with
-    | Asgn(x, e) -> 
+    | Asgn(x, e) ->
       cont (setSto store (x, eval e store))
-    | If(e1, stmt1, stmt2) -> 
-      if eval e1 store <> 0 then 
+    | If(e1, stmt1, stmt2) ->
+      if eval e1 store <> 0 then
         coExec2 stmt1 store cont econt
       else
         coExec2 stmt2 store cont econt
-    | Block stmts -> 
-      let rec loop ss sto = 
-              match ss with 
+    | Block stmts ->
+      let rec loop ss sto =
+              match ss with
               | []     -> cont sto
-              | s1::sr -> 
+              | s1::sr ->
                 coExec2 s1 sto (fun sto -> loop sr sto) econt
-      loop stmts store 
-    | For(x, estart, estop, stmt) -> 
+      loop stmts store
+    | For(x, estart, estop, stmt) ->
       let start = eval estart store
       let stop  = eval estop  store
-      let rec loop i sto = 
+      let rec loop i sto =
               if i > stop then cont sto
-              else coExec2 stmt (setSto sto (x, i)) 
-                                (fun sto -> loop (i+1) sto) 
+              else coExec2 stmt (setSto sto (x, i))
+                                (fun sto -> loop (i+1) sto)
                                 econt
-      loop start store 
-    | While(e, stmt) -> 
+      loop start store
+    | While(e, stmt) ->
       let rec loop sto =
               if eval e sto = 0 then cont sto
               else coExec2 stmt sto (fun sto -> loop sto) econt
-      loop store 
-    | Print e -> 
+      loop store
+    | Print e ->
       (printf "%d\n" (eval e store); cont store)
-    | Throw exn -> 
+    | Throw exn ->
       econt(exn, store)
     | TryCatch(stmt1, exn, stmt2) ->
       let econt1 (exn1, sto1) =
           if exn1 = exn then coExec2 stmt2 sto1 cont econt
                         else econt (exn1, sto1)
-      coExec2 stmt1 store cont econt1 
+      coExec2 stmt1 store cont econt1
 
-let run2 stmt : answer = 
-    coExec2 stmt emptystore 
-            (fun _ -> Terminate) 
+let run2 stmt : answer =
+    coExec2 stmt emptystore
+            (fun _ -> Terminate)
             (fun (Exn s, _) -> Abort ("Uncaught exception: " + s))
 
 (* Example programs *)
 
 (* Abruptly terminating a for loop *)
 
-let ex1 = 
+let ex1 =
     For("i", CstI 0, CstI 10,
         If(Prim("==", Var "i", CstI 7),
            Throw (Exn "seven"),
@@ -193,7 +193,7 @@ let ex1 =
 
 (* Abruptly terminating a while loop *)
 
-let ex2 = 
+let ex2 =
     Block[Asgn("i", CstI 0);
           While (CstI 1,
                  Block[Asgn("i", Prim("+", Var "i", CstI 1));
@@ -205,7 +205,7 @@ let ex2 =
 
 (* Abruptly terminating a while loop, and handling the exception *)
 
-let ex3 = 
+let ex3 =
     Block[Asgn("i", CstI 0);
           TryCatch(Block[While (CstI 1,
                                 Block[Asgn("i", Prim("+", Var "i", CstI 1));

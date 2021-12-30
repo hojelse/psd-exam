@@ -1,9 +1,9 @@
 // micro-C example 5 -- return a result via a pointer argument; nested blocks
 
 void main(int n) {
-  int r; 
+  int r;
   r = n;
-  { 
+  {
     int r;
     square(n, &r);
     print r;

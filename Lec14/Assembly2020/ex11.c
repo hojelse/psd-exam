@@ -14,7 +14,7 @@
 
 
 void main(int n) {
-  int i; 
+  int i;
   int u;
   int used[100];
   int diag1[100];
@@ -39,16 +39,16 @@ void main(int n) {
       while (u <= n && (used[u] || diag1[u-i+n] || diag2[u+i]))
 	u = u + 1;
       if (u <= n) { // not used[u]; fill col[i] then try col[i+1]
-	col[i] = u; 
-	diag1[u-i+n] = diag2[u+i] = used[u] = true; 
+	col[i] = u;
+	diag1[u-i+n] = diag2[u+i] = used[u] = true;
 	i = i+1; u = 1;
       } else {			// backtrack; try to find a new col[i-1]
 	i = i-1;
-	if (i > 0) { 
-	  u = col[i]; 
-	  diag1[u-i+n] = diag2[u+i] = used[u] = false; 
+	if (i > 0) {
+	  u = col[i];
+	  diag1[u-i+n] = diag2[u+i] = used[u] = false;
 	  u = u+1;
-	} 
+	}
       }
     }
 
@@ -56,14 +56,14 @@ void main(int n) {
       int j;
       j = 1;
       while (j <= n) {
-	print col[j];  
+	print col[j];
 	j = j+1;
       }
       println;
-      i = i-1; 
-      if (i > 0) { 
-	u = col[i]; 
-	diag1[u-i+n] = diag2[u+i] = used[u] = false; 
+      i = i-1;
+      if (i > 0) {
+	u = col[i];
+	diag1[u-i+n] = diag2[u+i] = used[u] = false;
 	u = u+1;
       }
     }

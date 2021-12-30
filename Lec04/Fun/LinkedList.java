@@ -34,7 +34,7 @@ class TestLinkedList {
 class Person {
   public final String name;
 
-  public Person(String name) { 
+  public Person(String name) {
     this.name = name;
   }
 }
@@ -47,11 +47,11 @@ class LinkedList<T> {
     public T item;
 
     public Node(T item) {
-      this.item = item; 
+      this.item = item;
     }
 
     public Node(T item, Node<T> prev, Node<T> next) {
-      this.item = item; this.prev = prev; this.next = next; 
+      this.item = item; this.prev = prev; this.next = next;
     }
   }
 
@@ -70,7 +70,7 @@ class LinkedList<T> {
     return node;
   }
 
-  public boolean add(T item) { 
+  public boolean add(T item) {
     if (last == null) // and thus first = null
       first = last = new Node<T>(item);
     else {
@@ -84,7 +84,7 @@ class LinkedList<T> {
   public boolean contains(T item) {
     Node<T> node = first;
     while (node != null) {
-      if (item.equals(node.item)) 
+      if (item.equals(node.item))
         return true;
       node = node.next;
     }
@@ -102,7 +102,7 @@ class LinkedList<T> {
         sb.append(",");
     }
     sb.append("]");
-    return sb.toString();    
+    return sb.toString();
   }
 
   // Corresponds to F# List.map of type 'T list * ('T -> 'R) -> 'R list

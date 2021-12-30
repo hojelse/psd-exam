@@ -51,21 +51,21 @@ total 40
 ...  15879 Oct 27 10:44 listmachine.c
 ...    816 Oct 27 10:44 utils_unix.c
 ...    965 Oct 27 10:44 utils_win.c
-$ gcc -o listmachine listmachine.c 
+$ gcc -o listmachine listmachine.c
 $ ll
 ...
 ...  17840 Oct 27 10:54 listmachine
 ...  15879 Oct 27 10:44 listmachine.c
 ...    816 Oct 27 10:44 utils_unix.c
 ...    965 Oct 27 10:44 utils_win.c
-$ ./listmachine 
+$ ./listmachine
 listmachine for 64 bit architecture compiled with GCC
 Usage: listmachine [-trace] <programfile> <arg1> ...
-$ 
+$
 
 Run examples (assuming listmachine is a symbolic link to
 ListVM/ListVM/listmachine.exe
 
    ./listmachine ex30.out 8
 
- 
+

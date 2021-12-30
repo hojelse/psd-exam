@@ -1,7 +1,7 @@
 ;;; Simplified example of 32-bit mode Windows nasm assembly
 
 ;;; To assemble, link and run on Windows 10 (64-bit OS):
-;;; 
+;;;
 ;;;   nasm -fwin32 winsimple.asm
 ;;;   cl winsimple.obj msvcrt.lib legacy_stdio_definitions.lib  /Fetry.exe
 ;;;   try.exe
@@ -15,7 +15,7 @@ global _main                   ; Define entry point for this code
 extern _printf                 ; Refer to C library function
 
 section .text
-                
+
 _main:
         push ebp                ; Save old base pointer
         mov ebp, esp            ; Set new base pointer

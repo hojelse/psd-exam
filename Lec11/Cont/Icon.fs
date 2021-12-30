@@ -1,7 +1,7 @@
-(* File Cont/Icon.fs 
+(* File Cont/Icon.fs
 
-   Abstract syntax and interpreter for micro-Icon, a language where an 
-   expression can produce more than one result.  
+   Abstract syntax and interpreter for micro-Icon, a language where an
+   expression can produce more than one result.
 
    sestoft@itu.dk * 2010-05-18
 
@@ -24,22 +24,22 @@ module Icon
 
 (* Micro-Icon abstract syntax *)
 
-type expr = 
+type expr =
   | CstI of int
   | CstS of string
   | FromTo of int * int
   | Write of expr
   | If of expr * expr * expr
-  | Prim of string * expr * expr 
+  | Prim of string * expr * expr
   | And of expr * expr
   | Or  of expr * expr
   | Seq of expr * expr
-  | Every of expr 
+  | Every of expr
   | Fail;;
 
 (* Runtime values and runtime continuations *)
 
-type value = 
+type value =
   | Int of int
   | Str of string;;
 
@@ -50,52 +50,52 @@ type cont = value -> econt -> value;;
 (* Print to console *)
 
 let write v =
-    match v with 
+    match v with
     | Int i -> printf "%d " i
     | Str s -> printf "%s " s;;
 
 (* Expression evaluation with backtracking *)
 
-let rec eval (e : expr) (cont : cont) (econt : econt) = 
+let rec eval (e : expr) (cont : cont) (econt : econt) =
     match e with
     | CstI i -> cont (Int i) econt
     | CstS s  -> cont (Str s) econt
-    | FromTo(i1, i2) -> 
-      let rec loop i = 
-          if i <= i2 then 
+    | FromTo(i1, i2) ->
+      let rec loop i =
+          if i <= i2 then
               cont (Int i) (fun () -> loop (i+1))
-          else 
+          else
               econt ()
       loop i1
-    | Write e -> 
+    | Write e ->
       eval e (fun v -> fun econt1 -> (write v; cont v econt1)) econt
-    | If(e1, e2, e3) -> 
+    | If(e1, e2, e3) ->
       eval e1 (fun _ -> fun _ -> eval e2 cont econt)
               (fun () -> eval e3 cont econt)
-    | Prim(ope, e1, e2) -> 
+    | Prim(ope, e1, e2) ->
       eval e1 (fun v1 -> fun econt1 ->
-          eval e2 (fun v2 -> fun econt2 -> 
+          eval e2 (fun v2 -> fun econt2 ->
               match (ope, v1, v2) with
-              | ("+", Int i1, Int i2) -> 
-                  cont (Int(i1+i2)) econt2 
-              | ("*", Int i1, Int i2) -> 
+              | ("+", Int i1, Int i2) ->
+                  cont (Int(i1+i2)) econt2
+              | ("*", Int i1, Int i2) ->
                   cont (Int(i1*i2)) econt2
-              | ("<", Int i1, Int i2) -> 
-                  if i1<i2 then 
+              | ("<", Int i1, Int i2) ->
+                  if i1<i2 then
                       cont (Int i2) econt2
                   else
                       econt2 ()
               | _ -> Str "unknown prim2")
               econt1)
           econt
-    | And(e1, e2) -> 
+    | And(e1, e2) ->
       eval e1 (fun _ -> fun econt1 -> eval e2 cont econt1) econt
-    | Or(e1, e2) -> 
+    | Or(e1, e2) ->
       eval e1 cont (fun () -> eval e2 cont econt)
-    | Seq(e1, e2) -> 
+    | Seq(e1, e2) ->
       eval e1 (fun _ -> fun econt1 -> eval e2 cont econt)
               (fun () -> eval e2 cont econt)
-    | Every e -> 
+    | Every e ->
       eval e (fun _ -> fun econt1 -> econt1 ())
              (fun () -> cont (Int 0) econt)
     | Fail -> econt ()

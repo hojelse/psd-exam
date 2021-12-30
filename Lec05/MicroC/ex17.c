@@ -5,8 +5,8 @@ void main() {
   k = 0;
   while (true) {
     k = k+1;
-    if (seq(k) > 240) 
-      print k; 
+    if (seq(k) > 240)
+      print k;
   }
 }
 
@@ -15,7 +15,7 @@ int seq(int i) {
   count = 0;
   while (i != 1) {
     count = count + 1;
-    if (i % 2 == 0) 
+    if (i % 2 == 0)
       i = i / 2;
     else
       i = i * 3 + 1;

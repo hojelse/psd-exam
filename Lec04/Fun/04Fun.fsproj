@@ -11,26 +11,26 @@
             <OtherFlags>--module FunLex --unicode</OtherFlags>
         </FsLex>
     </ItemGroup>
-  
+
     <ItemGroup>
         <Compile Include="Absyn.fs" />
         <Compile Include="Fun.fs" />
-  
+
         <None Include="FunPar.fsy" />
         <None Include="Lex.fsl" />
         <Compile Include="FunPar.fsi" />
         <Compile Include="FunPar.fs" />
         <Compile Include="FunLex.fs" />
-  
+
         <Compile Include="Parse.fs" />
         <Compile Include="HigherFun.fs" />
         <Compile Include="ParseAndRun.fs" />
         <Compile Include="ParseAndRunHigher.fs" />
         <Compile Include="TypeInference.fs" />
         <Compile Include="ParseAndType.fs" />
-  
+
         <!-- <Compile Include="Program.fs" /> -->
-  
+
         <PackageReference Include="FsLexYacc" Version="10.2.0" />
     </ItemGroup>
   </Project>

@@ -15,6 +15,6 @@ begin
   in
     print xs;
     print (map (fn x -> x + 1) xs)
-  end	       
+  end	
 end
-					     
+					

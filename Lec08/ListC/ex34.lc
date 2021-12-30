@@ -1,4 +1,4 @@
-// ex34.lc -- a listC source program 
+// ex34.lc -- a listC source program
 // Allocates a cons cell and accesses its components
 
 void main(int n) {

@@ -27,22 +27,22 @@ let ppTime (cpuTime,elapsed) =
 (* Plain parsing from a string, with poor error reporting *)
 let fromString (str : string) : program<'a> =
   let lexbuf = LexBuffer<char>.FromString(str)
-  try 
+  try
     FunPar.Main FunLex.Token lexbuf
-  with 
-  | exn -> let pos = lexbuf.EndPos 
-           failwithf "%s near line %d, column %d\n" 
+  with
+  | exn -> let pos = lexbuf.EndPos
+           failwithf "%s near line %d, column %d\n"
              (exn.Message) (pos.Line+1) pos.Column
-                             
+
 (* Parsing from a file *)
 let fromFile (filename : string) =
   use reader = new StreamReader(filename)
   let lexbuf = LexBuffer<char>.FromTextReader reader
-  try 
+  try
     FunPar.Main FunLex.Token lexbuf
-  with 
-  | exn -> let pos = lexbuf.EndPos 
-           failwithf "%s in file %s near line %d, column %d\n" 
+  with
+  | exn -> let pos = lexbuf.EndPos
+           failwithf "%s in file %s near line %d, column %d\n"
              (exn.Message) filename (pos.Line+1) pos.Column
 
 
@@ -50,17 +50,17 @@ let fromFile (filename : string) =
 let ppType = function
     None -> ""
   | Some t -> ":"+ (TypeInference.showType t)
-             
+
 let run s =
   try
     let p = fromString s
     let (typ',env',p') = TypeInference.inferProg p
-    let r = HigherFun.evalProg [] p' 
+    let r = HigherFun.evalProg [] p'
     (sprintf "\nProgram: %s" (Absyn.ppProg ppType p')) +
     (sprintf "\nResult type: %s" (TypeInference.showType typ')) +
     (sprintf "\nResult value: %A" r) +
              "\n"
-  with 
+  with
     Failure s -> sprintf "ParseTypeAndRun.run giving error %s" s
 
 let compProg' (opt_p,debug_p,verbose_p,eval_p,alpha_p,program,fname) =
@@ -85,11 +85,11 @@ let compProg' (opt_p,debug_p,verbose_p,eval_p,alpha_p,program,fname) =
             else ()
     let _ = Comp.compileToFile (opt_p,debug_p,verbose_p,p',fname)
     printf "\nCompiled to file %s\n" fname
-  with 
+  with
     Failure eMsg -> printf "ParseTypeAndRun.compProg' ERROR: %s \n" eMsg
 
 let compProg (program,fname) =
   compProg' (false,false,false,false,false,fromString program,fname)
 
 let compFile (opt_p,debug_p,verbose_p,eval_p,alpha_p,pname,fname) =
-  compProg' (opt_p,debug_p,verbose_p,eval_p,alpha_p,fromFile pname,fname)    
+  compProg' (opt_p,debug_p,verbose_p,eval_p,alpha_p,fromFile pname,fname)

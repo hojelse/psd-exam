@@ -1,7 +1,7 @@
 Compiled from "CircularQueue.java"
 class CircularQueue extends java.lang.Object
   Signature: length = 0x2
-   00 32 
+   00 32
   SourceFile: "CircularQueue.java"
   minor version: 0
   major version: 50
@@ -129,7 +129,7 @@ public CircularQueue(int);
    42:	iinc	2, 1
    45:	goto	28
    48:	return
-  LineNumberTable: 
+  LineNumberTable:
    line 11: 0
    line 8: 4
    line 9: 9
@@ -190,7 +190,7 @@ public java.lang.Object dequeue();
    66:	ldc	#12; //String Queue empty
    68:	invokespecial	#13; //Method java/lang/RuntimeException."<init>":(Ljava/lang/String;)V
    71:	athrow
-  LineNumberTable: 
+  LineNumberTable:
    line 18: 0
    line 19: 7
    line 20: 17
@@ -203,7 +203,7 @@ public java.lang.Object dequeue();
    frame_type = 62 /* same */
 
   Signature: length = 0x2
-   00 2C 
+   00 2C
 
 public void enqueue(java.lang.Object);
   Code:
@@ -241,7 +241,7 @@ public void enqueue(java.lang.Object);
    59:	invokespecial	#13; //Method java/lang/RuntimeException."<init>":(Ljava/lang/String;)V
    62:	athrow
    63:	return
-  LineNumberTable: 
+  LineNumberTable:
    line 29: 0
    line 30: 14
    line 31: 40
@@ -253,7 +253,7 @@ public void enqueue(java.lang.Object);
    frame_type = 9 /* same */
 
   Signature: length = 0x2
-   00 2F 
+   00 2F
 
 public static void main(java.lang.String[]);
   Code:
@@ -288,7 +288,7 @@ public static void main(java.lang.String[]);
    63:	invokevirtual	#24; //Method dequeue:()Ljava/lang/Object;
    66:	invokevirtual	#25; //Method java/io/PrintStream.println:(Ljava/lang/Object;)V
    69:	return
-  LineNumberTable: 
+  LineNumberTable:
    line 38: 0
    line 39: 9
    line 40: 19

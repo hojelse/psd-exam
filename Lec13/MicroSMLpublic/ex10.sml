@@ -1,4 +1,4 @@
-(* Example showing the calculation of free variables 
+(* Example showing the calculation of free variables
    Try with -debug option *)
 begin
   let
@@ -8,5 +8,5 @@ begin
     fun f x = x + y (* freevars=[x,y]-[x]=[y] *)
   in
     x+y
-  end         
+  end
 end (* freevars=[x,y]+[x,y]-[x,y,z]=[] *)

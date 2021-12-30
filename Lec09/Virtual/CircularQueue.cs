@@ -1,4 +1,4 @@
-// Circular queue with generic item type, based on array  
+// Circular queue with generic item type, based on array
 // sestoft@itu.dk * 2009-10-25
 
 using System;
@@ -11,7 +11,7 @@ class CircularQueue<T> {
   public CircularQueue(int capacity) {
     this.items = new T[capacity];
   }
-  
+
   public T Dequeue() {
     if (count > 0) {
       count--;

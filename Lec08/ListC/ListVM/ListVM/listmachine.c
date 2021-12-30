@@ -43,7 +43,7 @@ A header has the form for32 bits
 ttttttttnnnnnnnnnnnnnnnnnnnnnnnngg
 and for 64 bits
 ttttttttnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnngg
-where 
+where
   - tttttttt is the block tag, all 0 for cons cells
   - nn....nn is the block length (excluding header). 22 bits for 32 bit
              and 54 bits for 64 bit.
@@ -121,7 +121,7 @@ word* readfile(char* filename);
   #include "utils_win.c"
 #else
   #include "utils_unix.c"
-#endif 
+#endif
 
 #if defined(ENV32)
   #define IsInt(v) (((v)&1)==1)
@@ -257,11 +257,11 @@ void printStackAndPc(word s[], word bp, word sp, word p[], word pc) {
 
 word* allocate(unsigned int tag, uword length, word s[], word sp);
 
-// The machine: execute the code starting at p[pc] 
+// The machine: execute the code starting at p[pc]
 
 int execcode(word p[], word s[], word iargs[], int iargc, int /* boolean */ trace) {
 	
-  word bp = -999;        // Base pointer, for local variable access 
+  word bp = -999;        // Base pointer, for local variable access
   word sp = -1;          // Stack top pointer
   word pc = 0;           // Program counter: next instruction
   for (;;) {
@@ -404,11 +404,11 @@ int execute(int argc, char** argv, int /* boolean */ trace) {
   int t2 = getUserTimeMs();
   int runtime = t2 - t1;
   printf("\nUsed %d cpu milli-seconds\n", runtime);
-  
+
   return res;
 }
 
-// Garbage collection and heap allocation 
+// Garbage collection and heap allocation
 
 word mkheader(uword tag, uword length, unsigned int color) {
 #if defined(ENV32)
@@ -542,7 +542,7 @@ int main(int argc, char** argv) {
     printf("Size of word, word* is neither 32 nor 64 bit, cannot run\n");
     return -1;
   #endif
-    
+
   if (argc < 2) {
     printf("listmachine for " PPARCH "\n");
     printf(PPCOMP "\n");

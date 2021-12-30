@@ -11,17 +11,17 @@
 ;;; preserve the EBX register across the call; it is a callee-saves
 ;;; register.  This is done properly in the macbetter.asm example,
 ;;; which also shows how to deal with 16-byte stack alignment.
-        
+
 ;;; Assemble, link and run like this from a Terminal:
-;;;    nasm -f macho macsimple.asm -o try.o             ; Assemble            
-;;;    gcc -arch i386 -Wl,-no_pie try.o -o try          ; Link with C library 
-;;;    ./try                                            ; Run                 
+;;;    nasm -f macho macsimple.asm -o try.o             ; Assemble
+;;;    gcc -arch i386 -Wl,-no_pie try.o -o try          ; Link with C library
+;;;    ./try                                            ; Run
 
 global _main                    ; Define entry point for this code
 extern _printf                  ; Refer to C library function
 
 section .text
-                
+
 _main:
         push ebp                ; Save old base pointer
         mov ebp, esp            ; Set new base pointer

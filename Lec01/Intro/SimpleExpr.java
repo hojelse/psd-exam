@@ -5,22 +5,22 @@
 import java.util.Map;
 import java.util.HashMap;
 
-abstract class Expr { 
+abstract class Expr {
   abstract public int eval(Map<String,Integer> env);
   abstract public String fmt();
   abstract public String fmt2(Map<String,Integer> env);
 }
 
-class CstI extends Expr { 
+class CstI extends Expr {
   protected final int i;
 
-  public CstI(int i) { 
-    this.i = i; 
+  public CstI(int i) {
+    this.i = i;
   }
 
   public int eval(Map<String,Integer> env) {
     return i;
-  } 
+  }
 
   public String fmt() {
     return ""+i;
@@ -31,32 +31,32 @@ class CstI extends Expr {
   }
 }
 
-class Var extends Expr { 
+class Var extends Expr {
   protected final String name;
 
-  public Var(String name) { 
-    this.name = name; 
+  public Var(String name) {
+    this.name = name;
   }
 
   public int eval(Map<String,Integer> env) {
     return env.get(name);
-  } 
+  }
 
   public String fmt() {
     return name;
-  } 
+  }
 
   public String fmt2(Map<String,Integer> env) {
     return ""+env.get(name);
-  } 
+  }
 
 }
 
-class Prim extends Expr { 
+class Prim extends Expr {
   protected final String oper;
   protected final Expr e1, e2;
 
-  public Prim(String oper, Expr e1, Expr e2) { 
+  public Prim(String oper, Expr e1, Expr e2) {
     this.oper = oper; this.e1 = e1; this.e2 = e2;
   }
 
@@ -69,15 +69,15 @@ class Prim extends Expr {
       return e1.eval(env) - e2.eval(env);
     else
       throw new RuntimeException("unknown primitive");
-  } 
+  }
 
   public String fmt() {
     return "(" + e1.fmt() + oper + e2.fmt() + ")";
-  } 
+  }
 
   public String fmt2(Map<String,Integer> env) {
     return "(" + e1.fmt2(env) + oper + e2.fmt2(env) + ")";
-  } 
+  }
 
 }
 
@@ -85,7 +85,7 @@ public class SimpleExpr {
   public static void main(String[] args) {
     Expr e1 = new CstI(17);
     Expr e2 = new Prim("+", new CstI(3), new Var("a"));
-    Expr e3 = new Prim("+", new Prim("*", new Var("b"), new CstI(9)), 
+    Expr e3 = new Prim("+", new Prim("*", new Var("b"), new CstI(9)),
 		            new Var("a"));
     Map<String,Integer> env0 = new HashMap<String,Integer>();
     env0.put("a", 3);

@@ -58,7 +58,7 @@ let mul2 x = 2.0 * x;;
 mul2 3.5;;
 
 
-let makejunk title name = 
+let makejunk title name =
     "Dear " + title + " " + name + ", You won $$$!";;
 makejunk "Vice Chancellor" "Tofte";;
 
@@ -91,7 +91,7 @@ x;;                             (* outer x unchanged *)
 
 (* Pattern matching *)
 
-let rec facm n = 
+let rec facm n =
     match n with
     | 0 -> 1
     | _ -> n * facm(n-1);;
@@ -99,8 +99,8 @@ let rec facm n =
 
 (* Anonymous function defined by pattern matching *)
 
-let rec faca = 
-    function 
+let rec faca =
+    function
       | 0 -> 1
       | n -> n * faca(n-1);;
 
@@ -133,21 +133,21 @@ let equal = (x1 = x2);;
 let ss = ["Dear"; title; name; "you won $$$!"];;
 let junkmail2 = String.concat " " ss;;
 
-let rec sum xs = 
-    match xs with 
+let rec sum xs =
+    match xs with
     | []    -> 0
     | x::xr -> x + sum xr;;
 
 let x2sum = sum x2;;
 
-let rec prod xs = 
-    match xs with 
+let rec prod xs =
+    match xs with
     | []    -> 1
     | x::xr -> x * prod xr;;
 
 let x2prod = prod x2;;
 
-let rec len xs = 
+let rec len xs =
     match xs with
     | []    -> 0
     | x::xr -> 1 + len xr;;
@@ -174,20 +174,20 @@ ph.phone;;
 (* Exceptions *)
 
 exception IllegalHour;;
-let mins1 h = 
+let mins1 h =
     if h < 0 || h > 23 then raise IllegalHour
     else h * 60;;
 mins1 25;;
 
 try (mins1 25) with IllegalHour -> -1;;
 
-let mins2 h = 
+let mins2 h =
     if h < 0 || h > 23 then failwith "Illegal hour"
     else h * 60;;
 
 mins2 25;;
 
-let mins3 h = 
+let mins3 h =
     if h < 0 || h > 23 then failwithf "Illegal hour, h=%d" h
     else h * 60;;
 
@@ -203,7 +203,7 @@ type person =
 let people = [Student "Niels"; Teacher("Peter", 5083)];;
 
 let getphone1 person =
-    match person with 
+    match person with
     | Teacher(name, phone) -> phone
     | Student name         -> failwith "no phone";;
 
@@ -212,12 +212,12 @@ getphone1 (Student "Niels");;
 
 (* The option datatype *)
 
-type intopt = 
+type intopt =
      | Some of int
      | None;;
 
-let getphone2 person = 
-    match person with 
+let getphone2 person =
+    match person with
     | Teacher(name, phone) -> Some phone
     | Student name         -> None;;
 
@@ -227,13 +227,13 @@ getphone2 (Student "Niels");;
 (* Representing binary trees using a recursive datatype *)
 
 type inttree =
-     | Lf 
+     | Lf
      | Br of int * inttree * inttree;;
 
 let t1 = Br(34, Br(23, Lf, Lf), Br(54, Lf, Br(78, Lf, Lf)));;
 
-let rec sumtree t = 
-    match t with 
+let rec sumtree t =
+    match t with
     | Lf -> 0
     | Br(v, t1, t2) -> v + sumtree t1 + sumtree t2;;
 
@@ -259,7 +259,7 @@ let res4 = addSeventeen 100;;
 
 (* Polymorphic functions *)
 
-let rec len xs = 
+let rec len xs =
     match xs with
     | []    -> 0
     | x::xr -> 1 + len xr;;
@@ -272,23 +272,23 @@ len ["Oslo"; "Aarhus"; "Gothenburg"; "Copenhagen"];;
 (* Polymorphic datatypes *)
 
 type 'a tree =
-     | Lf 
+     | Lf
      | Br of 'a * 'a tree * 'a tree;;
 
 let t1 = Br(34, Br(23, Lf, Lf), Br(54, Lf, Br(78, Lf, Lf)));;
 
 let rec sumtree t =
-    match t with 
+    match t with
     | Lf -> 0
     | Br(v, t1, t2) -> v + sumtree t1 + sumtree t2;;
 
 let rec count t =
-    match t with 
+    match t with
     | Lf -> 0
     | Br(v, t1, t2) -> 1 + count t1 + count t2;;
 
-let rec preorder1 t = 
-    match t with 
+let rec preorder1 t =
+    match t with
     | Lf            -> []
     | Br(v, t1, t2) -> v :: preorder1 t1 @ preorder1 t2;;
 
@@ -297,7 +297,7 @@ preorder1 t1;;
 (* Accumulating parameters, for efficiency *)
 
 let rec preo t acc =
-    match t with 
+    match t with
     | Lf            -> acc
     | Br(v, t1, t2) -> v :: preo t1 (preo t2 acc);;
 
@@ -315,8 +315,8 @@ bind1 [("age", 47)] ("phone", 5083);;
 
 (* Higher-order functions *)
 
-let rec map f xs = 
-    match xs with 
+let rec map f xs =
+    match xs with
     | []    -> []
     | x::xr -> f x :: map f xr;;
 
@@ -353,13 +353,13 @@ let isZeroFirst = function | [0] -> true | _ -> false;;
 (* Higher-order functions on lists *)
 
 let rec filter p xs =
-    match xs with 
+    match xs with
     | []    -> []
     | x::xr -> if p x then x :: filter p xr else filter p xr;;
 
 let onlyEven = filter (fun i -> i%2 = 0) [4; 6; 5; 2; 54; 89];;
 
-let rec foldr f xs e = 
+let rec foldr f xs e =
     match xs with
     | []    -> e
     | x::xr -> f x (foldr f xr e);;

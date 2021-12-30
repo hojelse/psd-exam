@@ -6,7 +6,7 @@ Archive microsml.zip contains the files used below
 A. Building the micro-SML command line compiler microsmlc:
 
     fslex --unicode FunLex.fsl
-    fsyacc --module FunPar FunPar.fsy    
+    fsyacc --module FunPar FunPar.fsy
 
    fsharpc --standalone -r:/Users/nielshallenberg/fsharp/FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs TypeInference.fs HigherFun.fs Machine.fs Contcomp.fs ParseTypeAndRun.fs MicroSMLC.fs -o microsmlc.exe
 
@@ -32,7 +32,7 @@ C. Building the virtual machine
   On Unix / Mac:
     Go to directory MsmlVM/src where you find the C file
     msmlmachine.c
-    
+
     gcc -Wall msmlmachine.c -o msmlmachine
 
   On Windows:

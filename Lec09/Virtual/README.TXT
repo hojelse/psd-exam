@@ -4,7 +4,7 @@ Illustrating the Java Virtual Machine and the .NET Common Language Runtime
 Archive virtual.zip contains the files mentioned below:
 
 
-A. An implementation of selection sort in Java as well as C#.  
+A. An implementation of selection sort in Java as well as C#.
 
    This will compile the C# version and then disassemble its .NET
    Common Language Runtime bytecode into text file Selsort.il:
@@ -28,14 +28,14 @@ B. The programs CircularQueue.java and CircularQueue.cs implement a
    erased in the Java bytecode, whereas they are preserved in the .NET
    Common Language Runtime bytecode, although renamed to !T or similar.
 
-     javac CircularQueue.java 
+     javac CircularQueue.java
      javap -verbose -c CircularQueue > CircularQueue.jvmbytecode
 
      csc /o CircularQueue.cs
      ildasm /text CircularQueue.exe > CircularQueue.il
-   
+
 
 C. The programs StringConcatSpeed.java and StringConcatSpeed.cs
    demonstrate how repeated string concatenation using the (+)
    operator is very slow and stresses the garbage collector.
- 
+

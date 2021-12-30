@@ -1,7 +1,7 @@
-(* A functional language with integers and higher-order functions 
+(* A functional language with integers and higher-order functions
    sestoft@itu.dk 2009-09-11
    nh@itu.dk 2015-02-12
-   
+
    The language is called micro-SML because it has some inspiration from
    Standard ML including generative exceptions and the
    let val ... in end construct.
@@ -32,8 +32,8 @@ let createNumGen() =
 let newFuncName =
   let numGen = createNumGen()
   fun () -> "annFunc" + (string)(numGen())
-  
-let freshExnName = createNumGen()    
+
+let freshExnName = createNumGen()
 
 (* Environment operations *)
 
@@ -41,7 +41,7 @@ type 'v env = (string * 'v) list
 
 (* A runtime value is an integer or a function closure *)
 
-type value = 
+type value =
   | Int of int
   | List of value list
   | ClosureRef of closure ref
@@ -49,8 +49,8 @@ and closure =
   Closure of string * string * expr<typ> * value env       (* (f, x, fBody, fDeclEnv) *)
 
 type answer =
-  | Result of value  
-  | Abort of string 
+  | Result of value
+  | Abort of string
 
 let rec ppValue = function
   | Int i -> sprintf "%d" i
@@ -66,7 +66,7 @@ let ppEnv fPP env =
   List.foldBack ppEntry env ""
 
 let rec lookupOpt env x =
-  match env with 
+  match env with
   | []        -> None
   | (y, v)::r -> if x=y then Some v else lookupOpt r x
 
@@ -125,7 +125,7 @@ let rec evalExpr (env : value env) (e : expr<typ>)
        | Int _ -> evalExpr env e2 cont econt
        | _     -> Abort "evalExpr AndAlso") econt
   | OrElse(e1,e2,_) ->
-    evalExpr env e1 
+    evalExpr env e1
       (fun v1 ->
        match v1 with
        | Int 0 -> evalExpr env e2 cont econt
@@ -137,7 +137,7 @@ let rec evalExpr (env : value env) (e : expr<typ>)
   | Let(valdecs,letBody) -> evalValdecs env valdecs letBody cont econt
   | If(e1, e2, e3) ->
       evalExpr env e1
-        (fun v1 -> 
+        (fun v1 ->
          match v1 with
          | Int 0 -> evalExpr env e3 cont econt
          | Int _ -> evalExpr env e2 cont econt
@@ -153,7 +153,7 @@ let rec evalExpr (env : value env) (e : expr<typ>)
        | ClosureRef closRef as fVal ->
          (match !closRef with
           | Closure(f,x,fBody,fDeclEnv) ->
-            evalExpr env eArg 
+            evalExpr env eArg
               (fun xVal ->
                let fBodyEnv = (f,fVal) :: (x,xVal) :: fDeclEnv
                evalExpr fBodyEnv fBody cont econt)) econt
@@ -168,16 +168,16 @@ let rec evalExpr (env : value env) (e : expr<typ>)
 and evalValdecs (env:value env) (ts:valdec<typ> list) (body: expr<typ>)
                 (cont: value -> answer) (econt: value -> answer) : answer =
   match ts with
-  | [] -> evalExpr env body cont econt                    
-  | Fundecs fs :: ts' -> 
+  | [] -> evalExpr env body cont econt
+  | Fundecs fs :: ts' ->
     let closureRefs = List.map (fun (f,x,fBody) -> (f, ref (Closure(f,x,fBody,env)))) fs
     let updClosRef (f,closRef) =
       (match !closRef with
-       | Closure(f,x,fBody,_) -> 
+       | Closure(f,x,fBody,_) ->
          let freeVars = Set.toList (freevars fBody - (set [x;f]))
          let freeVarsEnv = List.filter (fun (f,_) -> List.exists ((=)f) freeVars) env
          let freeClosureRefs = List.filter (fun (f,_) -> List.exists ((=)f) freeVars) closureRefs
-         let fBodyEnv = (List.map (fun (f,closRef) -> (f, ClosureRef closRef)) freeClosureRefs) @ freeVarsEnv 
+         let fBodyEnv = (List.map (fun (f,closRef) -> (f, ClosureRef closRef)) freeClosureRefs) @ freeVarsEnv
          (closRef := Closure(f,x,fBody,fBodyEnv)))
     let _ = List.iter updClosRef closureRefs
     let env' = (List.map (fun (f, closRef) -> (f, ClosureRef closRef)) closureRefs) @ env
@@ -207,17 +207,17 @@ let check e =
     | Let(valdecs, letbody) -> fst (List.fold checkValdec' (true,env) valdecs)
     | If(e1, e2, e3) -> check' e1 env &&
                         check' e2 env &&
-                        check' e3 env 
+                        check' e3 env
     | Fun(x,fBody,_) -> check' fBody (x::env)
     | Call(eFun,eArg,_,_) -> check' eFun env && check' eArg env
-    | Raise(e,_) -> check' e env 
+    | Raise(e,_) -> check' e env
     | TryWith(e1,ExnVar exn,e2) -> check' e1 env && check' e2 env && List.exists ((=)exn) env
   and checkValdec' (b : bool, env : string list) (valdec : valdec<'a>) : bool * string list =
     match valdec with
-    |  Fundecs fs -> 
+    |  Fundecs fs ->
       let fEnv = List.foldBack (fun (f,_,_) env -> f::env) fs env (* fBody may recursively call f *)
       (List.foldBack (fun (_,x,fBody) acc -> check' fBody (x::fEnv) && acc) fs b,  (* Only include x for function f *)
        fEnv)
     | Valdec(x,eRhs) -> (check' eRhs env,x::env)
     | Exn(ExnVar x,_) -> (b, x::env)
-  check' e []  
+  check' e []

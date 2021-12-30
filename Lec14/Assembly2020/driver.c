@@ -16,16 +16,16 @@ int printc(int c) { printf("%c", c); return c; }
 
 int printi(int i) { printf("%d ", i); return i; }
 
-void checkargc(int a, int b) { 
+void checkargc(int a, int b) {
   if (a!=b) {
-    printf("Wrong argument count: expected %d but got %d\n",a,b); 
+    printf("Wrong argument count: expected %d but got %d\n",a,b);
     exit(1);
   }
 }
 
 int main(int argc, char **argv) {
   int i, args[63];
-  for (i=1; i<argc; i++) 
+  for (i=1; i<argc; i++)
     args[i-1] = atoi(argv[i]);
   asm_main(argc-1,args);
   printf("\nRan %.3f s\n",(clock())*1.0/CLOCKS_PER_SEC);
