@@ -21,7 +21,6 @@
     <Compile Include="ExprPar.fs" />
     <Compile Include="ExprLex.fs" />
     <Compile Include="Parse.fs" />
-    <Compile Include="ex2_4Handout.fs" />
     <!-- Other files -->
     <!-- <Compile Include="Program.fs" /> -->
     <PackageReference Include="FsLexYacc" Version="10.2.0" />
