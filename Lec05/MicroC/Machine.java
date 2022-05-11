@@ -35,7 +35,8 @@ class Machine {
     GOTO = 16, IFZERO = 17, IFNZRO = 18, CALL = 19, TCALL = 20, RET = 21,
     PRINTI = 22, PRINTC = 23,
     LDARGS = 24,
-    STOP = 25;
+    STOP = 25,
+    PRINTSTACK = 26;
 
   final static int STACKSIZE = 1000;
 
@@ -128,14 +129,37 @@ class Machine {
       case PRINTC:
         System.out.print((char)(s[sp])); break;
       case LDARGS:
-	for (int i=0; i<iargs.length; i++) // Push commandline arguments
-	  s[++sp] = iargs[i];
-	break;
+        for (int i=0; i<iargs.length; i++) // Push commandline arguments
+          s[++sp] = iargs[i];
+        break;
       case STOP:
         return sp;
+      case PRINTSTACK:
+        int N = s[sp--];
+        printStack(N, s, bp, sp);
+        break;
       default:
         throw new RuntimeException("Illegal instruction " + p[pc-1]
                                    + " at address " + (pc-1));
+      }
+    }
+  }
+
+  private static void printStack(int n, int[] s, int bp, int sp) {
+    System.out.println(String.format("-Print Stack %s-----------", n));
+    System.out.println("Stack Frame");
+    for (int i = sp; i >= 0; i--) {
+      if (bp-1 == i){
+        bp = s[bp-1];
+        System.out.println(String.format(" s[%s]:  bp = %s", i, s[i--]));
+        System.out.println(String.format(" s[%s]:  ret = %s", i, s[i]));
+        System.out.println((bp == -999) ? "Global" : "Stack Frame");
+      } else {
+        if (bp == -999) {
+          System.out.println(String.format(" s[%s]: %s", i, s[i]));
+        } else {
+          System.out.println(String.format(" s[%s]:  Local/Temp = %s", i, s[i]));
+        }
       }
     }
   }

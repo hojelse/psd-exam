@@ -3,7 +3,7 @@
     Lexer specification for micro-C, a small imperative language
   *)
 
-module CLex
+// module CLex
 
 open FSharp.Text.Lexing
 open CPar;
@@ -16,6 +16,8 @@ let lexemeAsString lexbuf =
 
 let keyword s =
     match s with
+    | "printStack"-> PRINTSTACK
+    | "within"  -> WITHIN
     | "char"    -> CHAR
     | "else"    -> ELSE
     | "false"   -> CSTBOOL 0

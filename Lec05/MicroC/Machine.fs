@@ -41,6 +41,7 @@ type instr =
   | PRINTC                             (* print s[sp] as character        *)
   | LDARGS                             (* load command line args on stack *)
   | STOP                               (* halt the abstract machine       *)
+  | PRINTSTACK
 
 (* Generate new distinct labels *)
 
@@ -90,7 +91,8 @@ let CODERET    = 21
 let CODEPRINTI = 22
 let CODEPRINTC = 23
 let CODELDARGS = 24
-let CODESTOP   = 25;
+let CODESTOP   = 25
+let CODEPRINTSTACK = 26;
 
 (* Bytecode emission, first pass: build environment that maps
    each label to an integer address in the bytecode.
@@ -98,6 +100,7 @@ let CODESTOP   = 25;
 
 let makelabenv (addr, labenv) instr =
     match instr with
+    | PRINTSTACK     -> (addr+1, labenv)
     | Label lab      -> (addr, (lab, addr) :: labenv)
     | CSTI i         -> (addr+2, labenv)
     | ADD            -> (addr+1, labenv)
@@ -130,6 +133,7 @@ let makelabenv (addr, labenv) instr =
 
 let rec emitints getlab instr ints =
     match instr with
+    | PRINTSTACK     -> CODEPRINTSTACK :: ints
     | Label lab      -> ints
     | CSTI i         -> CODECSTI   :: i :: ints
     | ADD            -> CODEADD    :: ints

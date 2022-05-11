@@ -25,6 +25,7 @@ module Icon
 (* Micro-Icon abstract syntax *)
 
 type expr =
+  | Random of int * int * int
   | CstI of int
   | CstS of string
   | FromTo of int * int
@@ -60,6 +61,16 @@ let rec eval (e : expr) (cont : cont) (econt : econt) =
     match e with
     | CstI i -> cont (Int i) econt
     | CstS s  -> cont (Str s) econt
+    | Random(min, max, num) ->
+      let random = new System.Random();
+      let randomNext(min, max) =
+        random.Next(min, max+1)
+      let rec loop i =
+          if i > 0 then
+              cont (Int (randomNext(min, max))) (fun () -> loop (i-1))
+          else
+              econt ()
+      loop num
     | FromTo(i1, i2) ->
       let rec loop i =
           if i <= i2 then

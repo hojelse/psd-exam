@@ -143,6 +143,8 @@ let rec cStmt stmt (varEnv : varEnv) (funEnv : funEnv) : instr list =
       [RET (snd varEnv - 1)]
     | Return (Some e) ->
       cExpr e varEnv funEnv @ [RET (snd varEnv)]
+    | PrintStack e ->
+      cExpr e varEnv funEnv @ [PRINTSTACK]
 
 and cStmtOrDec stmtOrDec (varEnv : varEnv) (funEnv : funEnv) : varEnv * instr list =
     match stmtOrDec with
@@ -205,6 +207,13 @@ and cExpr (e : expr) (varEnv : varEnv) (funEnv : funEnv) : instr list =
       @ cExpr e2 varEnv funEnv
       @ [GOTO labend; Label labtrue; CSTI 1; Label labend]
     | Call(f, es) -> callfun f es varEnv funEnv
+    | WithIn(e, e1, e2) ->
+      cExpr e varEnv funEnv
+      @ [DUP]
+      @ cExpr e1 varEnv funEnv
+      @ [LT; SWAP]
+      @ cExpr e2 varEnv funEnv
+      @ [SWAP; LT; ADD; NOT]
 
 (* Generate code to access variable, dereference pointer or index array.
    The effect of the compiled code is to leave an lvalue on the stack.   *)

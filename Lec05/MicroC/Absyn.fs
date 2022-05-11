@@ -23,6 +23,7 @@ and expr =
   | Andalso of expr * expr           (* Sequential and              *)
   | Orelse of expr * expr            (* Sequential or               *)
   | Call of string * expr list       (* Function call f(...)        *)
+  | WithIn of expr * expr * expr
 
 and access =
   | AccVar of string                 (* Variable access        x    *)
@@ -30,6 +31,7 @@ and access =
   | AccIndex of access * expr        (* Array indexing         a[e] *)
 
 and stmt =
+  | PrintStack of expr
   | If of expr * stmt * stmt         (* Conditional                 *)
   | While of expr * stmt             (* While loop                  *)
   | Expr of expr                     (* Expression statement   e;   *)

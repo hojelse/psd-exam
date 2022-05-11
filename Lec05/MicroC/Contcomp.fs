@@ -185,6 +185,7 @@ let makeGlobalEnvs(topdecs : topdec list) : varEnv * funEnv * instr list =
 
 let rec cStmt stmt (varEnv : varEnv) (funEnv : funEnv) (C : instr list) : instr list =
     match stmt with
+    | PrintStack e -> cExpr e varEnv funEnv C @ [PRINTSTACK]
     | If(e, stmt1, stmt2) ->
       let (jumpend, C1) = makeJump C
       let (labelse, C2) = addLabel (cStmt stmt2 varEnv funEnv C1)
